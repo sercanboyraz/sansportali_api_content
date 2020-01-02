@@ -1,0 +1,16 @@
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.RazorAssemblyInfo.cache
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.RazorAssemblyInfo.cs
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.AssemblyInfoInputs.cache
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.AssemblyInfo.cs
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\appsettings.Development.json
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\appsettings.json
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\Properties\launchSettings.json
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\PortalCore.deps.json
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\PortalCore.runtimeconfig.json
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\PortalCore.runtimeconfig.dev.json
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\PortalCore.dll
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.RazorTargetAssemblyInfo.cache
+C:\Diger\SansOyunlari\Portal\PortalCore\bin\Debug\netcoreapp2.2\PortalCore.pdb
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.dll
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.pdb
+C:\Diger\SansOyunlari\Portal\PortalCore\obj\Debug\netcoreapp2.2\PortalCore.csprojAssemblyReference.cache

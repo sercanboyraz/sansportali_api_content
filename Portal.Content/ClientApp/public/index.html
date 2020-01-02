@@ -1,0 +1,244 @@
+<html>
+
+<head>
+    <style>
+        /* Topbar */
+
+        #controls {
+            padding: 5px;
+            border-bottom: solid 1px #ccc;
+            background-color: #f8f8f8;
+            display: -webkit-flex;
+            flex-direction: column;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            font-family: cursive;
+            height: 100%;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .head-nav li:hover {
+            background-color: #1a1a1a;
+        }
+
+        .head-nav li:hover:before {
+            background-color: #1a1a1a;
+        }
+
+        .head-nav li:hover img {
+            background: #1a1a1a;
+            fill: slategray;
+        }
+
+        .head-nav li:hover span {
+            color: slategray;
+        }
+
+        .head-nav li:before {
+            position: absolute;
+            left: -0.925rem;
+            top: 0;
+            width: 0.925rem;
+            height: 100%;
+            content: "";
+            background: #ED1C5B;
+            z-index: 1;
+            transition: background 400ms;
+        }
+
+        .head-nav ul {
+            margin-top: 1.85rem;
+            margin-right: 0;
+            margin-bottom: 0;
+            margin-left: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .head-nav li {
+            position: relative;
+            clear: both;
+            width: 100%;
+            padding: 0;
+            transition: background 400ms;
+        }
+
+        .head-nav li {
+            display: flex;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
+        }
+
+        .head-nav {
+            align-items: center;
+            width: 100%;
+            color: #fefefe;
+            text-decoration: none;
+            transition: color 400ms;
+        }
+
+        .head-nav span {
+            position: relative;
+            display: block;
+            z-index: 0;
+            font-family: cursive;
+            text-indent: -20em;
+            white-space: nowrap;
+            top: 10px;
+            transition: text-indent 400ms ease-in-out;
+        }
+
+        .head-nav img {
+            position: relative;
+            max-width: 80px;
+            max-height: 50px;
+            z-index: 1;
+            fill: #fefefe;
+            background: slategray;
+            transition: 400ms;
+        }
+
+        @media screen and (max: 768px) {
+            .head-nav ul {
+                margin-top: 0.23125rem;
+            }
+
+            .head-nav img {
+                max-width: 50px;
+            }
+        }
+
+        .main-head {
+            position: fixed;
+            bottom: 0;
+            width: 83px;
+            height: 100%;
+            z-index: 1;
+            background: slategray;
+            transition: width 400ms;
+        }
+
+        .main-head:hover {
+            width: 236px;
+        }
+
+        .main-head:hover+.wrap-all-the-things {
+            transform: translateX(150px);
+            /* margin-left: -83px; */
+            max-width: 100%;
+            opacity: 0.4;
+        }
+
+        .main-head:hover .head-nav li:nth-of-type(1) span {
+            transition-delay: 100ms;
+        }
+
+        .main-head:hover .head-nav li:nth-of-type(2) span {
+            transition-delay: 200ms;
+        }
+
+        .main-head:hover .head-nav li:nth-of-type(3) span {
+            transition-delay: 300ms;
+        }
+
+        .main-head:hover .head-nav li:nth-of-type(4) span {
+            transition-delay: 400ms;
+        }
+
+        .main-head:hover .head-nav span {
+            text-indent: 1em;
+            font-family: cursive;
+            top: 10px;
+        }
+
+        @media screen and (max: 768px) {
+            .main-head {
+                width: 70px;
+                padding: 0 0.925rem;
+            }
+
+            .main-head .head-nav {
+                padding-left: 7px;
+            }
+
+            .main-head:hover .head-nav span {
+                text-indent: 1em;
+                font-family: cursive;
+            }
+        }
+
+        .wrap-all-the-things {
+            min-height: 100%;
+            height: 100%;
+            /* padding-left: 140px; */
+            margin-top: 0;
+            margin-left: 83px;
+            background-size: cover;
+            background-position: center center;
+            transition: transform 400ms, opacity 400ms;
+        }
+
+        .Login {
+            padding: 60px 0;
+        }
+
+        .Login form {
+            margin: 0 auto;
+            max-width: 320px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    <!-- <link rel="stylesheet" href="assets/css/no-topbar.css"> -->
+    <!-- <script src="../assets/js/webview.js"></script> -->
+    <!-- <script src="../assets/js/topbar.js"> </script> -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" /> -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
+
+</head>
+
+<body>
+    <div id="root"></div>
+    <div class="wrap-all-the-things">
+        <webview id="webview" src="https://www.iddaa.com.tr/"></webview>
+    </div>
+    <script>
+
+        var webview = document.getElementById('webview');
+        webview.addEventListener('dom-ready', function () {
+            webview.insertCSS(".relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
+            webview.insertCSS(".coupon__bottom-line  { display:block;} ");
+            webview.insertCSS(".coupon__select-input  { padding-left: 85px;text-align:right !important");
+            webview.insertCSS(".coupon__select-box  { width: 100%;} ")
+        });
+
+        window.addEventListener('load', (event) => {
+            let webview = document.querySelector('webview');
+            let windowWidth = document.documentElement.clientWidth;
+            let windowHeight = document.documentElement.clientHeight;
+            let controlsHeight = getControlsHeight();
+            let webviewHeight = windowHeight - controlsHeight;
+
+            webview.style.width = windowWidth + 'px';
+            webview.style.height = webviewHeight + 'px';
+        });
+
+        function getControlsHeight() {
+            let controls = document.querySelector('#controls');
+            if (controls) {
+                return controls.offsetHeight;
+            }
+            return 0;
+        }
+    </script>
+</body>
+
+</html>
