@@ -24,7 +24,7 @@ namespace Portal.Core
                                 FROM `webcontentpermission` 
                                 INNER JOIN `webcontent` 
                                 ON `WebContentId` = `webcontent`.`Id` 
-                                WHERE `UserId` = @userid";
+                                WHERE `UserId` = @userid Order By OrderNo";
             cmd.Parameters.Add(new MySqlParameter
             {
                 ParameterName = "@userid",

@@ -192,32 +192,30 @@
 
         .Login form {
             margin: 0 auto;
-            max-width: 320px;
         }
     </style>
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-    <!-- <link rel="stylesheet" href="assets/css/no-topbar.css"> -->
-    <!-- <script src="../assets/js/webview.js"></script> -->
-    <!-- <script src="../assets/js/topbar.js"> </script> -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" /> -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
-
 </head>
 
 <body>
     <div id="root"></div>
     <div class="wrap-all-the-things">
-        <webview id="webview" src="https://www.iddaa.com.tr/"></webview>
+        <webview id="webview" allowpopups></webview>
     </div>
     <script>
-
         var webview = document.getElementById('webview');
         webview.addEventListener('dom-ready', function () {
-            webview.insertCSS(".relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
-            webview.insertCSS(".coupon__bottom-line  { display:block;} ");
-            webview.insertCSS(".coupon__select-input  { padding-left: 85px;text-align:right !important");
-            webview.insertCSS(".coupon__select-box  { width: 100%;} ")
+            webview.insertCSS(".modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
+            webview.insertCSS(".coupon__bottom-line  { display:block; } ");
+            webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
+            webview.insertCSS(".coupon__select-box  { width: 100%; } ");
+        });
+
+        webview.addEventListener('double-click', (e) => {
+            e.preventDefault();
+            console.log("12312312");
         });
 
         window.addEventListener('load', (event) => {
@@ -226,18 +224,18 @@
             let windowHeight = document.documentElement.clientHeight;
             let controlsHeight = getControlsHeight();
             let webviewHeight = windowHeight - controlsHeight;
-
             webview.style.width = windowWidth + 'px';
             webview.style.height = webviewHeight + 'px';
         });
 
         function getControlsHeight() {
-            let controls = document.querySelector('#controls');
+            let controls = document.querySelector('#root');
             if (controls) {
                 return controls.offsetHeight;
             }
             return 0;
         }
+
     </script>
 </body>
 

@@ -38,7 +38,7 @@ export default class App extends React.Component {
             }).catch(function (error) {
                 // handle error
                 this.setState({ error: error });
-            })
+            });
     }
 
     getPermissionHandle = (getLocalStorageUser) => {
@@ -48,10 +48,10 @@ export default class App extends React.Component {
 
                     if (responsePermission.data) {
                         this.setState({ permission: responsePermission.data });
-                        this.setState({ username: "" })
-                        this.setState({ password: "" })
-                        this.setState({ error: "" })
-                        this.setState({ info: "" })
+                        this.setState({ username: "" });
+                        this.setState({ password: "" });
+                        this.setState({ error: "" });
+                        this.setState({ info: "" });
                     }
                     else {
                         this.setState({ info: "Yetkileriniz çekilemedi" });
@@ -59,7 +59,7 @@ export default class App extends React.Component {
                 }).catch(function (error) {
                     // handle error
                     this.setState({ error: error });
-                })
+                });
         }
     }
 
@@ -79,13 +79,13 @@ export default class App extends React.Component {
                                 <form>
                                     <Form.Group >
                                         <Form.Label>Kullanıcı Adı</Form.Label>
-                                        <Form.Control placeholder="Enter username" value={username} onChange={e => this.setState({ username: e.target.value })} />
+                                        <Form.Control placeholder="Kullanıcı Adı" value={username} onChange={e => this.setState({ username: e.target.value })} />
                                         <Form.Text className="text-muted">Sans Portalı kullanıcı adınız.</Form.Text>
                                     </Form.Group>
 
                                     <Form.Group controlId="formBasicPassword">
                                         <Form.Label>Şifre</Form.Label>
-                                        <Form.Control value={password} onChange={e => this.setState({ password: e.target.value })} type="password" placeholder="Password" />
+                                        <Form.Control value={password} onChange={e => this.setState({ password: e.target.value })} type="password" placeholder="Şifre" />
                                         <Form.Text className="text-muted">Sans Portalı şifreniz.</Form.Text>
                                     </Form.Group>
                                     {

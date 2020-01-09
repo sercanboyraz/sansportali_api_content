@@ -3,10 +3,17 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const fs = require("fs");
+const { net } = require('electron')
+// const fetch = require('electron-main-fetch');
+const fetch = require('node-fetch');
 
-// Menu (for standard keyboard shortcuts)
+const Store = require('./store.js');
+var wifi = require("node-wifi");
+
+
+
+
 const { Menu } = require('electron');
-
 const template = [
   {
     label: 'Edit',
@@ -42,56 +49,13 @@ const template = [
       { role: 'minimize' },
       { role: 'close' }
     ]
-  }
+  },
 ];
-
-if (process.platform === 'darwin') {
-  template.unshift({
-    label: app.name,
-    submenu: [
-      { role: 'about' },
-      { type: 'separator' },
-      { role: 'services', submenu: [] },
-      { type: 'separator' },
-      { role: 'hide' },
-      { role: 'hideothers' },
-      { role: 'unhide' },
-      { type: 'separator' },
-      { role: 'quit' }
-    ]
-  });
-
-  // Edit menu
-  template[1].submenu.push(
-    { type: 'separator' },
-    {
-      label: 'Speech',
-      submenu: [
-        { role: 'startspeaking' },
-        { role: 'stopspeaking' }
-      ]
-    }
-  );
-
-  // Window menu
-  template[3].submenu = [
-    { role: 'close' },
-    { role: 'minimize' },
-    { role: 'zoom' },
-    { type: 'separator' },
-    { role: 'front' }
-  ]
-}
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
-let initPath;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 app.on('ready', () => {
-  // let { username, password, id, phoneNumber, licenseCount, name, surname } = store.get('usersinfo');
 
   mainWindow = new BrowserWindow({
     // width: 1024,
@@ -104,33 +68,79 @@ app.on('ready', () => {
       webviewTag: true,
       zoomFactor: 1.0,
       blinkFeatures: 'OverlayScrollbars',
-      nodeIntegration: false,
+      nodeIntegration: true,
       contextIsolation: false,
       webSecurity: false,
-      nativeWindowOpen: true
+      nativeWindowOpen: true,
+      allowRunningInsecureContent: true,
+      scrollBounce: true,
+      enableRemoteModule: true,
+      nodeIntegrationInWorker: true,
+      nodeIntegrationInSubFrames: true,
     },
-    // fullscreenable: true,
-    // simpleFullscreen: true,
     fullscreen: true,
-    focusable: true
+    isFullScreen: true,
+    isFullScreenable: true,
+    isKiosk: true,
   });
 
-  mainWindow.webContents.clearHistory();
+  // mainWindow.loadURL('https://content.boykaf.xyz/');
+  mainWindow.loadURL('http://localhost:3000/');
 
-  mainWindow.loadURL('https://content.boykaf.xyz/');
-  // mainWindow.loadURL('http://localhost:3000/');
-  // mainWindow.loadURL('https://sercanboyraz.github.io/ss/');
-  // store.set('usersinfo', { username, password, id, phoneNumber, licenseCount, name, surname });
+  // wifi.init({ iface: null });
+  // wifi.scan(function (err, networks) {
+  //   console.log(networks);
+  //   mainWindow.webContents.executeJavaScript('localStorage.setItem("wifis",JSON.stringify(' + JSON.stringify(networks) + '));', true)
+  // });
+  // mainWindow.webContents.executeJavaScript('localStorage.getItem("SSID");', true)
+  //   .then((result) => {
+  //     console.log(result);
+  //     mainWindow.webContents.executeJavaScript('localStorage.getItem("Password");', true)
+  //       .then((result2) => {
+  //         console.log(result2);
+  //         wifi.connect({ ssid: result, password: result2 }, function (err) {
+  //           if (err) {
+  //             console.log(err);
+  //           } else
+  //             console.log("Connected");
+  //         });
+  //       })
+  //   })
+
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 });
+
+app.on('web-contents-created', (e, contents) => {
+  e.preventDefault();
+  if (contents.getType() == 'webview') {
+    contents.on('new-window', (e, url) => {
+      e.preventDefault();
+
+      let child = new BrowserWindow({ parent: mainWindow, width: 900, height: 900, modal: true, show: false, isNormal: true, fullscreen: false, fullscreenable: false, });
+      child.loadURL(url);
+      child.once('ready-to-show', () => {
+        child.show();
+      });
+
+      fetch('https://content.boykaf.xyz/css.json')
+        .then(res => res.text())
+        .then(json => {
+          child.webContents.once('dom-ready', function () {
+            child.webContents.insertCSS(json);
+          });
+        });
+
+      e.preventDefault();
+    })
+  }
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   data = {
     bounds: mainWindow.getBounds()
   };
-  fs.writeFileSync(initPath, JSON.stringify(data));
   app.quit();
 });

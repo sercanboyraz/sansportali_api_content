@@ -22,3 +22,17 @@ Portal.Core/obj/project.assets.json
 Portal.Core/obj/Portal.Core.csproj.nuget.g.props
 Portal.Core/obj/Portal.Core.csproj.nuget.cache
 Portal.Core/obj/Debug/netcoreapp2.2/Portal.Core.assets.cache
+/Portal.Content/ClientApp/node_modules
+/Portal.Content/Electron/Electron webview-win32-x64
+/Portal.Content/Electron/Electron webview-win32-ia32
+/Portal.Content/Electron/Electron webview-win32-arm64
+/Portal.Content/Electron/Electron webview-mas-x64
+/Portal.Content/Electron/Electron webview-linux-x64
+/Portal.Content/Electron/Electron webview-linux-ia32
+/Portal.Content/Electron/Electron webview-linux-armv7l
+/Portal.Content/Electron/Electron webview-linux-arm64
+/Portal.Content/Electron/Electron webview-darwin-x64
+/Portal.Content/Electron/all-win32-x64
+/Portal.Core/obj/Release/netcoreapp2.2
+/Portal.Core/bin/Release/netcoreapp2.2
+/.vs/Portal

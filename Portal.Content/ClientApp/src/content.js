@@ -1,12 +1,15 @@
 import React from 'react'
-
+import { ListGroup, InputGroup, Button, FormControl, Modal } from 'react-bootstrap'
 const axios = require('axios');
 // Make a request for a user with a given ID
 
 export default class Content extends React.Component {
 
     state = {
-        permissions: null
+        permissions: null,
+        show: false,
+        ssid: "",
+        password: ""
     }
 
     constructor(props) {
@@ -39,8 +42,18 @@ export default class Content extends React.Component {
         }
     }
 
+    handleClose = () => this.setState({ show: false });
+    handleShow = () => this.setState({ show: true });
+    handleSave = () => {
+        localStorage.setItem("SSID", this.state.ssid);
+        localStorage.setItem("Password", this.state.password);
+        this.handleClose();
+    }
+    setWifiPassword = (pass) => this.setState({ password: pass });
+    setWifiSSID = (id) => this.setState({ ssid: id });
     render() {
         const { permissions } = this.state;
+        const wifiList = JSON.parse(localStorage.getItem("wifis"));
         return (
             <header className="main-head">
                 <nav className="head-nav">
@@ -52,87 +65,51 @@ export default class Content extends React.Component {
                                     <img src={data.webContent.logoUrl} width="40" style={{ marginLeft: 20 }} />
                                     <span>{data.webContent.displayName}</span>
                                 </li>
-                            )
-                            )
+                            ))
                         }
-                        {/* <li>
-                            <a href="#" id="iddaa">
-                                <img src="assets/icons/images/iddaacom.png" width="40" style="margin-left: 20px;" />
-                                <span>İddaa</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="nesine">
-                                <img src="assets/icons/images/nesinecom.png" width="40" style="margin-left: 20px;" />
-                                <span>Nesine</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="iddaatv">
-                                <img src="assets/icons/images/iddaatvcom.png" width="40" style="margin-left: 20px;" />
-                                <span>İddaa Tv</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="sahadan">
-                                <img src="assets/icons/images/sahadancom.png" width="40" style="margin-left: 20px;" />
-                                <span>Sahadan</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="mackolik">
-                                <img src="assets/icons/images/mackolikcom.png" width="40" style="margin-left: 20px;" />
-                                <span>Maçkolik</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="tjk">
-                                <img src="assets/icons/images/tjk.png" width="40" style="margin-left: 20px;" />
-                                <span>TJK</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="sayisalloto">
-                                <img src="assets/icons/images/millipiyangocom.png" width="40" style="margin-left: 20px;" />
-                                <span>Sayısal Loto</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="onnumara">
-                                <img src="assets/icons/images/millipiyangocom.png" width="40" style="margin-left: 20px;" />
-                                <span>On Numara</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="sanstopu">
-                                <img src="assets/icons/images/millipiyangocom.png" width="40" style="margin-left: 20px;" />
-                                <span>Sans Topu</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="superloto">
-                                <img src="assets/icons/images/millipiyangocom.png" width="40" style="margin-left: 20px;" />
-                                <span>Super Loto</span>
-                            </a>
-                        </li>
-
-                        <li>
-                            <a href="#" id="piyango">
-                                <img src="assets/icons/images/millipiyangocom.png" width="40" style="margin-left: 20px;" />
-                                <span>Milli Piyango</span>
-                            </a>
-                        </li> */}
                     </ul>
                 </nav>
+                <div>
+
+                    <Button variant="dark" onClick={this.handleShow} style={{ padding: 3, width: '100%', position: 'absolute', bottom: 1 }}>
+                        Wifi
+                    </Button>
+
+                    <Modal show={this.state.show} onHide={this.handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>Wifi</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <ListGroup defaultActiveKey="#link1">
+                                {
+                                    wifiList &&
+                                    wifiList.map((data) =>
+                                        <ListGroup.Item action style={{ fontSize: 12, padding: 0, margin: 0, height: 39 }} onSelect={() => this.setWifiSSID(data.ssid)}>
+                                            <InputGroup className="mb-3">
+                                                <InputGroup.Prepend>
+                                                    <InputGroup.Text id="basic-addon3">
+                                                        {
+                                                            data.ssid
+                                                        }
+                                                    </InputGroup.Text>
+                                                </InputGroup.Prepend>
+                                                <FormControl id={data.ssid} aria-describedby="basic-addon3" onChange={(e) => this.setWifiPassword(e.target.value)} onClick={() => this.setWifiSSID(data.ssid)} />
+                                            </InputGroup>
+                                        </ListGroup.Item>
+                                    )
+                                }
+                            </ListGroup>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={this.handleClose}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={() => this.handleSave()}>
+                                Save Changes
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </div>
             </header>
         )
     }
