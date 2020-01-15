@@ -12,7 +12,6 @@ var wifi = require("node-wifi");
 
 
 
-
 const { Menu } = require('electron');
 const template = [
   {
@@ -84,14 +83,13 @@ app.on('ready', () => {
     isKiosk: true,
   });
 
-  // mainWindow.loadURL('https://content.boykaf.xyz/');
-  mainWindow.loadURL('http://localhost:3000/');
 
   // wifi.init({ iface: null });
   // wifi.scan(function (err, networks) {
   //   console.log(networks);
   //   mainWindow.webContents.executeJavaScript('localStorage.setItem("wifis",JSON.stringify(' + JSON.stringify(networks) + '));', true)
   // });
+
   // mainWindow.webContents.executeJavaScript('localStorage.getItem("SSID");', true)
   //   .then((result) => {
   //     console.log(result);
@@ -107,7 +105,9 @@ app.on('ready', () => {
   //       })
   //   })
 
-
+  mainWindow.loadURL('https://content.boykaf.xyz/');
+  //mainWindow.loadURL('http://localhost:3000/');
+  mainWindow.reload();
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 });
@@ -136,6 +136,7 @@ app.on('web-contents-created', (e, contents) => {
     })
   }
 })
+
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
