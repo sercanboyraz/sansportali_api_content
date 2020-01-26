@@ -45,11 +45,53 @@ export default class Content extends React.Component {
             let windowHeight = document.documentElement.clientHeight;
             let controlsHeight = this.getControlsHeight();
             let webviewHeight = windowHeight - controlsHeight;
-            webview.style.width = (windowWidth - 50) + 'px';
-            webview.style.height = controlsHeight + 'px';
+            webview.style.width = (windowWidth - 1) + 'px';
+            webview.style.height = webviewHeight + 'px';
 
         });
     }
+
+    componentWillUpdate() {
+        var webview = document.getElementById('webview');
+        webview.addEventListener('dom-ready', function () {
+            webview.insertCSS(".modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
+            webview.insertCSS(".coupon__bottom-line  { display:block; } ");
+            webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
+            webview.insertCSS(".coupon__select-box  { width: 100%; } ");
+        });
+
+        window.addEventListener('load', (event) => {
+            let webview = document.querySelector('webview');
+            let windowWidth = document.documentElement.clientWidth;
+            let windowHeight = document.documentElement.clientHeight;
+            let controlsHeight = this.getControlsHeight();
+            let webviewHeight = windowHeight - controlsHeight;
+            webview.style.width = (windowWidth - 1) + 'px';
+            webview.style.height = webviewHeight + 'px';
+        });
+    }
+
+
+    componentDidUpdate() {
+        var webview = document.getElementById('webview');
+        webview.addEventListener('dom-ready', function () {
+            webview.insertCSS(".modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
+            webview.insertCSS(".coupon__bottom-line  { display:block; } ");
+            webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
+            webview.insertCSS(".coupon__select-box  { width: 100%; } ");
+        });
+
+        window.addEventListener('load', (event) => {
+            let webview = document.querySelector('webview');
+            let windowWidth = document.documentElement.clientWidth;
+            let windowHeight = document.documentElement.clientHeight;
+            let controlsHeight = this.getControlsHeight();
+            let webviewHeight = windowHeight - controlsHeight;
+            webview.style.width = (windowWidth - 1) + 'px';
+            webview.style.height = webviewHeight + 'px';
+        });
+    }
+
 
     getControlsHeight = () => {
         let controls = document.querySelector('#root');
@@ -148,9 +190,6 @@ export default class Content extends React.Component {
                     </Modal> */}
                     </div>
                 </header>
-                <div className="wrap-all-the-things">
-                    <webview id="webview" allowpopups={true}></webview>
-                </div>
             </div>
         )
     }

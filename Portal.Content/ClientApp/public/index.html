@@ -202,6 +202,9 @@
 <body>
     <div id="root"></div>
 
+    <div className="wrap-all-the-things">
+        <webview id="webview" allowpopups></webview>
+    </div>
     <script>
         var webview = document.getElementById('webview');
         webview.addEventListener('dom-ready', function () {
@@ -217,11 +220,8 @@
             let windowHeight = document.documentElement.clientHeight;
             let controlsHeight = getControlsHeight();
             let webviewHeight = windowHeight - controlsHeight;
-            webview.style.width = windowWidth + 'px';
+            webview.style.width = (windowWidth - 1) + 'px';
             webview.style.height = webviewHeight + 'px';
-            document.getElementById('refreshButton').click(function () {
-                console.log("The paragraph was clicked.");
-            });
         });
 
         function getControlsHeight() {
@@ -231,9 +231,6 @@
             }
             return 0;
         }
-
-
-
     </script>
 </body>
 

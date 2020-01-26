@@ -105,8 +105,8 @@ app.on('ready', () => {
   //       })
   //   })
 
-  mainWindow.loadURL('https://content.boykaf.xyz/');
-  //mainWindow.loadURL('http://localhost:3000/');
+  //mainWindow.loadURL('https://content.boykaf.xyz/');
+  mainWindow.loadURL('http://localhost:3000/');
   mainWindow.reload();
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
