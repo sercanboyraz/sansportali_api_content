@@ -39,7 +39,8 @@
         }
 
         .head-nav li:hover span {
-            color: slategray;
+            color: #f8f9fa;
+            font-size: 17px;
         }
 
         .head-nav li:before {
@@ -73,8 +74,9 @@
 
         .head-nav li {
             display: flex;
-            padding-top: 2vh;
-            padding-bottom: 2vh;
+            padding-top: 18px;
+            padding-bottom: 18px;
+            cursor: pointer;
         }
 
         .head-nav {
@@ -128,6 +130,18 @@
 
         .main-head:hover {
             width: 236px;
+        }
+
+        .main-head:hover .speedButton {
+            display: inherit;
+        }
+
+        .speedButton {
+            padding: 3px;
+            width: 236px;
+            position: absolute;
+            bottom: 1px;
+            display: none;
         }
 
         .main-head:hover+.wrap-all-the-things {

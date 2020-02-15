@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "electron-main-fetch": "^0.2.0",
+    "electron-shutdown-command": "0.0.8",
     "network-manager": "^1.0.2",
     "node-fetch": "^2.6.0",
     "node-wifi": "^2.0.12"
