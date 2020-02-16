@@ -7,6 +7,19 @@ const electron = window.require('electron');
 const fs = electron.remote.require('fs');
 const ipcRenderer = electron.ipcRenderer;
 // Make a request for a user with a given ID
+const publicIp = require('public-ip');
+var ipv4 = "";
+var ipv6 = "";
+(async () => {
+    console.log(await publicIp.v4());
+    //=> '46.5.21.123'
+
+    console.log(await publicIp.v6());
+    //=> 'fe80::200:f8ff:fe21:67cf'
+})();
+
+const url = "http://localhost:5000/";
+// const url = "https://api.boykaf.xyz/";
 
 export default class Content extends React.Component {
 
@@ -23,6 +36,8 @@ export default class Content extends React.Component {
         this.setState({ permissions: this.props.permission });
     }
 
+    ipv4 = async () => { return publicIp.v4() };
+    ipv6 = async () => { return publicIp.v6() };
     componentDidMount() {
         this.setState({ permissions: this.props.permission });
         this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
@@ -30,7 +45,7 @@ export default class Content extends React.Component {
         var getLocalStorageUserId = localStorage.getItem('userPortalId');
         if (getLocalStorageUserId && !this.props.permission) {
             if (getLocalStorageUserId) {
-                axios.get('https://api.boykaf.xyz/webContentPermission?userId=' + getLocalStorageUserId)
+                axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
                     .then(responsePermission => {
                         if (responsePermission.data) {
                             this.setState({ permissions: responsePermission.data });
@@ -38,6 +53,15 @@ export default class Content extends React.Component {
                     })
             }
         }
+
+        this.ipv4().then(result => {
+            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + result)
+                .then(ip => {
+                    if (ip.data) {
+                        this.setState({ ipValue: result });
+                    }
+                })
+        });
 
         var webview = document.getElementById('webview');
         webview.addEventListener('dom-ready', function () {
@@ -217,7 +241,7 @@ export default class Content extends React.Component {
                         </div>
                         <Modal show={this.state.show} onHide={this.handleClose}>
                             <Modal.Header closeButton>
-                                <Modal.Title>Kablosuz İnternet(Wifi)</Modal.Title>
+                                <Modal.Title>Kablosuz İnternet(Wifi) - {this.state.ipValue}</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <ListGroup defaultActiveKey="#link1">

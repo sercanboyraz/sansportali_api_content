@@ -38,6 +38,7 @@ namespace Portal.Core.Controllers
         //        return new NotFoundResult();
         //    return new OkObjectResult(result);
         //}
+
         [HttpGet]
         public async Task<IActionResult> GetNamePassword(string username, string password)
         {

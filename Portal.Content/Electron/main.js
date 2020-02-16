@@ -3,60 +3,27 @@ const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const fs = require("fs");
-const { net } = require('electron')
-// const fetch = require('electron-main-fetch');
+const { net, ipcMain, Menu } = require('electron')
 const fetch = require('node-fetch');
-const { ipcMain } = require('electron')
-const Store = require('./store.js');
 var wifi = require("node-wifi");
 const shutdown = require('electron-shutdown-command');
 
-
-
-
-const { Menu } = require('electron');
 const template = [
-  {
-    label: 'Edit',
-    submenu: [
-      { role: 'undo' },
-      { role: 'redo' },
-      { type: 'separator' },
-      { role: 'cut' },
-      { role: 'copy' },
-      { role: 'paste' },
-      { role: 'pasteandmatchstyle' },
-      { role: 'delete' },
-      { role: 'selectall' }
-    ]
-  },
   {
     label: 'View',
     submenu: [
       { role: 'reload' },
       { role: 'forcereload' },
-      { role: 'toggledevtools' },
-      { type: 'separator' },
-      { role: 'resetzoom' },
-      { role: 'zoomin' },
-      { role: 'zoomout' },
-      { type: 'separator' },
-      { role: 'togglefullscreen' }
+      { role: 'toggledevtools' }
     ]
-  },
-  {
-    role: 'window',
-    submenu: [
-      { role: 'minimize' },
-      { role: 'close' }
-    ]
-  },
+  }
 ];
 let mainWindow;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
-app.on('ready', () => {
+
+function createWindow() {
 
   mainWindow = new BrowserWindow({
     // width: 1024,
@@ -106,14 +73,21 @@ app.on('ready', () => {
         })
     })
 
-  mainWindow.webContents.executeJavaScript('document.getElementsByTagName("BODY")[0].innerHTML +=  "<div id="lockdiv" style="display: block;position:absolute;top: 0;left: 0;height: 100%;right: 0;width: 100%;"></div>"; ', true)
-
+  if (process.env.NODE_ENV === 'development') {
+    mainWindow.webContents.openDevTools()
+  }
   // mainWindow.loadURL('https://content.boykaf.xyz/');
   mainWindow.loadURL('http://localhost:3000/');
   mainWindow.reload();
   const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(null);
-});
+  Menu.setApplicationMenu(menu);
+
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  })
+
+}
+
 
 ipcMain.handle('get-wifi-names', async (event, someArgument) => {
   console.log("get-wifi-names") // prints "ping"
@@ -152,11 +126,10 @@ app.on('web-contents-created', (e, contents) => {
   e.preventDefault();
   let child;
   if (contents.getType() == 'webview') {
-    mainWindow.webContents.executeJavaScript('document.getElementsByTagName("BODY")[0].innerHTML +=  "<div id="lockdiv" style="display: block;position:absolute;top: 0;left: 0;height: 100%;right: 0;width: 100%;"></div>"; ', true)
     contents.on('new-window', (e, url) => {
       e.preventDefault();
 
-      child = new BrowserWindow({ parent: mainWindow, width: 900, height: 900, modal: true, show: false, isNormal: true, fullscreen: false, fullscreenable: false, });
+      child = new BrowserWindow({ parent: mainWindow, width: 900, height: 900, modal: true, show: false, isNormal: true, fullscreen: false, fullscreenable: false, minimizable: false, maximizable: false });
       child.loadURL(url);
       child.once('ready-to-show', () => {
         try {
@@ -179,6 +152,8 @@ app.on('web-contents-created', (e, contents) => {
   }
 })
 
+app.on('ready', createWindow);
+
 app.on('window-all-closed', () => {
   data = {
     bounds: mainWindow.getBounds()
@@ -186,3 +161,9 @@ app.on('window-all-closed', () => {
   app.quit();
 });
 
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow()
+  }
+})

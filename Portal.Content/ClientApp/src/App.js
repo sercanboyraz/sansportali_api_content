@@ -7,6 +7,8 @@ import Bootstrap from "react-bootstrap";
 const axios = require('axios');
 // Make a request for a user with a given ID
 
+const url = "http://localhost:5000/";
+// const url = "https://api.boykaf.xyz/";
 export default class App extends React.Component {
 
     state = {
@@ -26,7 +28,7 @@ export default class App extends React.Component {
     }
 
     handleSubmit = (event) => {
-        axios.get('https://api.boykaf.xyz/users?username=' + this.state.username + '&password=' + this.state.password)
+        axios.get(url+'users?username=' + this.state.username + '&password=' + this.state.password)
             .then(response => {
                 if (response.data) {
                     localStorage.setItem('userPortalId', response.data.id);
@@ -43,7 +45,7 @@ export default class App extends React.Component {
 
     getPermissionHandle = (getLocalStorageUser) => {
         if (getLocalStorageUser) {
-            axios.get('https://api.boykaf.xyz/webContentPermission?userId=' + getLocalStorageUser)
+            axios.get(url + 'webContentPermission?userId=' + getLocalStorageUser)
                 .then(responsePermission => {
 
                     if (responsePermission.data) {

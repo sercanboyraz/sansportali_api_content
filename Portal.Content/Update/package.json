@@ -1,0 +1,53 @@
+{
+  "name": "sansder-platform",
+  "productName": "Sansder Platform",
+  "version": "1.0.0",
+  "description": "Sansder Platform",
+  "main": "../Electron/main.js",
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "start": "electron .",
+    "dist": "electron-builder",
+    "publish": "publish",
+    "release": "npm run dist && npm run publish"
+  },
+  "author": "Alexey Prokhorov",
+  "license": "MIT",
+  "private": true,
+  "build": {
+    "appId": "sercanboyraz.electron-sander-platform",
+    "files": [
+      "!publisher.json",
+      "!updates.json"
+    ],
+    "linux": {
+      "category": "Development",
+      "publish": false,
+      "target": "AppImage"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "win": {
+      "target": "squirrel"
+    },
+    "squirrelWindows": {
+      "iconUrl": "https://update.boykaf.xyz/icon.ico"
+    }
+  },
+  "updater": {
+    "url": "https://update.boykaf.xyz/updates.json"
+  },
+  "engines": {
+    "node": ">=6.0"
+  },
+  "dependencies": {
+    "electron-simple-updater": "^2.0.0-beta.1"
+  },
+  "devDependencies": {
+    "electron": "*",
+    "electron-builder": "*",
+    "electron-simple-publisher": "*",
+    "electron-builder-squirrel-windows": "*"
+  }
+}
