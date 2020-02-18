@@ -18,7 +18,9 @@ const template = [
     ]
   }
 ];
+
 let mainWindow;
+let child;
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -73,10 +75,7 @@ function createWindow() {
         })
     })
 
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.webContents.openDevTools()
-  }
-  // mainWindow.loadURL('https://content.boykaf.xyz/');
+  //mainWindow.loadURL('https://boykaf.xyz/');
   mainWindow.loadURL('http://localhost:3000/');
   mainWindow.reload();
   const menu = Menu.buildFromTemplate(template);
@@ -86,13 +85,25 @@ function createWindow() {
     mainWindow = null
   })
 
-}
+  mainWindow.on('minimize', function (event) {
+    event.preventDefault();
+    mainWindow.hide();
+  });
 
+  mainWindow.on('maximizable', function (event) {
+    if (!application.isQuiting) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
+
+    return false;
+  });
+}
 
 ipcMain.handle('get-wifi-names', async (event, someArgument) => {
   console.log("get-wifi-names") // prints "ping"
   var resultData = await wifi.scan().then((function (networks) {
-    console.log(networks);
+    // console.log(networks);
     mainWindow.webContents.executeJavaScript('localStorage.setItem("wifis",JSON.stringify(' + JSON.stringify(networks) + '));')
     return networks;
   }));
@@ -117,6 +128,11 @@ ipcMain.handle('set-wifi-names', async (event, someArgument) => {
   return "";
 })
 
+ipcMain.handle('close-button', async (event, someArgument) => {
+  child.close();
+  return "";
+})
+
 ipcMain.handle('shutdown_event', async (event, someArgument) => {
   shutdown.shutdown();
   return "";
@@ -124,23 +140,42 @@ ipcMain.handle('shutdown_event', async (event, someArgument) => {
 
 app.on('web-contents-created', (e, contents) => {
   e.preventDefault();
-  let child;
   if (contents.getType() == 'webview') {
     contents.on('new-window', (e, url) => {
       e.preventDefault();
+      child = new BrowserWindow({
+        parent: mainWindow,
+        width: 1150, height: 900, modal: true, show: false,
+        isNormal: true, fullscreen: false, fullscreenable: false,
+        minimizable: false, maximizable: false, closable: true,
+        center: true, darkTheme: true, kiosk: true, frame: false,
+        webPreferences: {
+          // nodeIntegration: true,
+          webviewTag: true,
+          zoomFactor: 1.0,
+          blinkFeatures: 'OverlayScrollbars',
+          nodeIntegration: true,
+          contextIsolation: false,
+          webSecurity: false,
+          nativeWindowOpen: true,
+          allowRunningInsecureContent: true,
+          scrollBounce: true,
+          enableRemoteModule: true,
+          nodeIntegrationInWorker: true,
+          nodeIntegrationInSubFrames: true,
+        },
+      });
+      //`file://${__dirname}/index.html`
+      child.webContents.openDevTools();
 
-      child = new BrowserWindow({ parent: mainWindow, width: 900, height: 900, modal: true, show: false, isNormal: true, fullscreen: false, fullscreenable: false, minimizable: false, maximizable: false });
-      child.loadURL(url);
+      child.loadURL(`file://${__dirname}/index.html`);
+
       child.once('ready-to-show', () => {
-        try {
-          child.show();
-        }
-        catch{
-
-        }
+        child.show();
       });
 
-      fetch('https://content.boykaf.xyz/css.json')
+      child.webContents.executeJavaScript('localStorage.setItem("url",' + JSON.stringify(url) + ');', true);
+      fetch('https://boykaf.xyz/css.json')
         .then(res => res.text())
         .then(json => {
           child.webContents.once('dom-ready', function () {

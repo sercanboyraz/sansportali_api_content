@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+</head>
+
+<body style="margin:0px;">
+    <div style="position: absolute;top: 0;left:0;right:0;height: 25px;background-color: darkgray;">
+        <button id="close-btn" style="position: absolute;right: 0;top: 0;height: 25px;width: 25px;">x</button>
+    </div>
+
+    <webview id="webview" style="margin-top: 25px; height: 873px;">
+        <div class="indicator"></div>
+    </webview>
+
+    <script>
+        var webview = document.getElementById('webview');
+        webview.addEventListener('dom-ready', function () {
+            webview.insertCSS(".modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
+            webview.insertCSS(".coupon__bottom-line  { display:block; } ");
+            webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
+            webview.insertCSS(".coupon__select-box  { width: 100%; } ");
+        });
+
+        // window.addEventListener('load', (event) => {
+        //     let webview = document.querySelector('webview');
+        //     let windowWidth = document.documentElement.clientWidth;
+        //     let windowHeight = document.documentElement.clientHeight;
+        //     let controlsHeight = getControlsHeight();
+        //     let webviewHeight = windowHeight - controlsHeight;
+        //     webview.style.width = (windowWidth - 1) + 'px';
+        //     webview.style.height = webviewHeight + 'px';
+        // });
+
+        // function getControlsHeight() {
+        //     let controls = document.querySelector('#root');
+        //     if (controls) {
+        //         return controls.offsetHeight;
+        //     }
+        //     return 0;
+        // }
+    </script>
+
+    <script>
+        (
+            function () {
+                document.getElementById("close-btn").addEventListener("click", (e) => {
+                    window.close();
+                });
+                document.querySelector('webview').src = window.localStorage.getItem('url');
+            }
+        )();
+    </script>
+
+    <script>
+        onload = () => {
+            const webview = document.querySelector('webview')
+            const indicator = document.querySelector('.indicator')
+
+            const loadstart = () => {
+                indicator.innerText = 'loading...'
+            }
+
+            const loadstop = () => {
+                indicator.innerText = ''
+            }
+
+            webview.addEventListener('did-start-loading', loadstart)
+            webview.addEventListener('did-stop-loading', loadstop)
+        }
+    </script>
+</body>
+
+</html>

@@ -1,25 +1,13 @@
 import React from 'react'
 import { ListGroup, InputGroup, Button, FormControl, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff } from '@material-ui/icons';
-
 const axios = require('axios');
 const electron = window.require('electron');
-const fs = electron.remote.require('fs');
 const ipcRenderer = electron.ipcRenderer;
-// Make a request for a user with a given ID
 const publicIp = require('public-ip');
-var ipv4 = "";
-var ipv6 = "";
-(async () => {
-    console.log(await publicIp.v4());
-    //=> '46.5.21.123'
 
-    console.log(await publicIp.v6());
-    //=> 'fe80::200:f8ff:fe21:67cf'
-})();
-
-const url = "http://localhost:5000/";
-// const url = "https://api.boykaf.xyz/";
+//const url = "http://localhost:5000/";
+ const url = "https://api.boykaf.xyz/";
 
 export default class Content extends React.Component {
 
@@ -38,6 +26,7 @@ export default class Content extends React.Component {
 
     ipv4 = async () => { return publicIp.v4() };
     ipv6 = async () => { return publicIp.v6() };
+
     componentDidMount() {
         this.setState({ permissions: this.props.permission });
         this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
@@ -211,12 +200,12 @@ export default class Content extends React.Component {
                                     <Tooltip id={`tooltip-PowerSettingsNew`}><strong>Kapat</strong></Tooltip>
                                 }>
                                 <Button variant="dark" onClick={e => this.setState({ showShutdown: true })} style={{ marginRight: 5 }} >
-                                    <PowerSettingsNew ></PowerSettingsNew>
+                                    <PowerSettingsNew></PowerSettingsNew>
                                 </Button>
                             </OverlayTrigger>
 
                             <OverlayTrigger
-                                key="top"
+                                key="top1"
                                 placement="top"
                                 overlay={
                                     <Tooltip id={`tooltip-LoopOutlined`}><strong>Yenile</strong></Tooltip>
@@ -228,7 +217,7 @@ export default class Content extends React.Component {
                             </OverlayTrigger>
 
                             <OverlayTrigger
-                                key="top"
+                                key="top2"
                                 placement="top"
                                 overlay={
                                     <Tooltip id={`tooltip-WifiOutlined`}><strong>Wifi</strong></Tooltip>
@@ -266,7 +255,7 @@ export default class Content extends React.Component {
                             </Modal.Body>
                             <Modal.Footer>
                                 <OverlayTrigger
-                                    key="top"
+                                    key="top3"
                                     placement="top"
                                     overlay={
                                         <Tooltip id={`tooltip-LoopOutlineds`}><strong>Wifi Tara</strong></Tooltip>
@@ -276,7 +265,7 @@ export default class Content extends React.Component {
                                     </Button>
                                 </OverlayTrigger>
                                 <OverlayTrigger
-                                    key="top"
+                                    key="top4"
                                     placement="top"
                                     overlay={
                                         <Tooltip id={`tooltip-DoneAlls`}><strong>Kaydet</strong></Tooltip>
@@ -296,7 +285,7 @@ export default class Content extends React.Component {
                             </Modal.Body>
                             <Modal.Footer>
                                 <OverlayTrigger
-                                    key="top"
+                                    key="top5"
                                     placement="top"
                                     overlay={
                                         <Tooltip id={`tooltip-HighlightOffs`}><strong>İptal Et</strong></Tooltip>
@@ -306,7 +295,7 @@ export default class Content extends React.Component {
                                     </Button>
                                 </OverlayTrigger>
                                 <OverlayTrigger
-                                    key="top"
+                                    key="top6"
                                     placement="top"
                                     overlay={
                                         <Tooltip id={`tooltip-PowerSettingsNews`}><strong>Kapat</strong></Tooltip>
