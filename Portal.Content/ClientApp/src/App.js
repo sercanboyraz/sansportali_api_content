@@ -82,6 +82,14 @@ export default class App extends React.Component {
         }
     }
 
+    handleSave = () => {
+        localStorage.setItem("SSID", this.state.ssid);
+        localStorage.setItem("Password", this.state.password);
+        ipcRenderer.invoke('set-wifi-names', null).then((result) => {
+            this.handleClose();
+        })
+    }
+
     render() {
         const getLocalStorageUsername = localStorage.getItem('userPortalId');
         const { username, password, info, error } = this.state;
@@ -155,22 +163,14 @@ export default class App extends React.Component {
                                             </ListGroup>
                                         </Modal.Body>
                                         <Modal.Footer>
-                                            <OverlayTrigger
-                                                key="top3"
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip id={`tooltip-LoopOutlineds`}><strong>Wifi Tara</strong></Tooltip>
-                                                }>
+                                            <OverlayTrigger key="top3" placement="top"
+                                                overlay={<Tooltip id={`tooltip-LoopOutlineds`}><strong>Wifi Tara</strong></Tooltip>}>
                                                 <Button variant="secondary" onClick={() => this.refreshWifi()} style={{ position: "absolute", left: 10, bottom: 11 }}>
                                                     <LoopOutlined></LoopOutlined>
                                                 </Button>
                                             </OverlayTrigger>
-                                            <OverlayTrigger
-                                                key="top4"
-                                                placement="top"
-                                                overlay={
-                                                    <Tooltip id={`tooltip-DoneAlls`}><strong>Kaydet</strong></Tooltip>
-                                                }>
+                                            <OverlayTrigger key="top4" placement="top"
+                                                overlay={<Tooltip id={`tooltip-DoneAlls`}><strong>Kaydet</strong></Tooltip>}>
                                                 <Button variant="primary" onClick={() => this.handleSave()}>
                                                     <DoneAll></DoneAll>
                                                 </Button>
@@ -178,8 +178,6 @@ export default class App extends React.Component {
                                         </Modal.Footer>
                                     </Modal>
                                 </form>
-
-
                             </div>
                         )
                 }

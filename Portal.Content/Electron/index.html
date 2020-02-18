@@ -8,7 +8,7 @@
 
 <body style="margin:0px;">
     <div style="position: absolute;top: 0;left:0;right:0;height: 25px;background-color: darkgray;">
-        <button id="close-btn" style="position: absolute;right: 0;top: 0;height: 25px;width: 25px;">x</button>
+        <button id="close-btn" style="position: absolute;right: 0;top: 0;height: 25px;width: 25px;"><strong>x</strong></button>
     </div>
 
     <webview id="webview" style="margin-top: 25px; height: 873px;">
@@ -23,24 +23,6 @@
             webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
             webview.insertCSS(".coupon__select-box  { width: 100%; } ");
         });
-
-        // window.addEventListener('load', (event) => {
-        //     let webview = document.querySelector('webview');
-        //     let windowWidth = document.documentElement.clientWidth;
-        //     let windowHeight = document.documentElement.clientHeight;
-        //     let controlsHeight = getControlsHeight();
-        //     let webviewHeight = windowHeight - controlsHeight;
-        //     webview.style.width = (windowWidth - 1) + 'px';
-        //     webview.style.height = webviewHeight + 'px';
-        // });
-
-        // function getControlsHeight() {
-        //     let controls = document.querySelector('#root');
-        //     if (controls) {
-        //         return controls.offsetHeight;
-        //     }
-        //     return 0;
-        // }
     </script>
 
     <script>
