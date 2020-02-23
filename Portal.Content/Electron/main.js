@@ -36,7 +36,7 @@ function setMainMenu() {
             shutdown.shutdown();
           }
         },
-        { role: 'toggledevtools' }
+        // { role: 'toggledevtools' }
       ]
     }
   ];
@@ -91,62 +91,78 @@ function createWindow() {
   mainWindow.loadURL('https://boykaf.xyz/');
   //mainWindow.loadURL('http://localhost:3000/');
 }
+
 app.on('web-contents-created', (e, contents) => {
   e.preventDefault();
   if (contents.getType() == 'webview') {
     contents.on('new-window', (e, url) => {
-      e.preventDefault();
-      if (!child) {
-        child = new BrowserWindow({
-          parent: mainWindow,
-          width: 1150, height: 900, modal: true, show: false,
-          isNormal: true, fullscreen: false, fullscreenable: false,
-          minimizable: false, maximizable: false, closable: true,
-          center: true, darkTheme: true, kiosk: true, frame: false,
-          webPreferences: {
-            // nodeIntegration: true,
-            webviewTag: true,
-            zoomFactor: 1.0,
-            blinkFeatures: 'OverlayScrollbars',
-            nodeIntegration: true,
-            contextIsolation: false,
-            webSecurity: false,
-            nativeWindowOpen: true,
-            allowRunningInsecureContent: true,
-            scrollBounce: true,
-            enableRemoteModule: true,
-            nodeIntegrationInWorker: true,
-            nodeIntegrationInSubFrames: true,
-          },
-        });
-        //`file://${__dirname}/index.html`
-        // child.webContents.openDevTools();
-
-        child.loadURL(`file://${__dirname}/index.html`);
-
-        child.once('ready-to-show', () => {
-          child.show();
-        });
-
-        child.on('closed', () => {
-          mainWindow.webContents.executeJavaScript('document.body.style.pointerEvents = "auto";', true);
-          child = null;
-        });
-
-        mainWindow.webContents.executeJavaScript('document.body.style.pointerEvents = "none";', true);
-
-        child.webContents.executeJavaScript('localStorage.setItem("url",' + JSON.stringify(url) + ');', true);
-        fetch('https://boykaf.xyz/css.json')
-          .then(res => res.text())
-          .then(json => {
-            if (child && child.webContents) {
-              child.webContents.once('dom-ready', function () {
-                child.webContents.insertCSS(json);
-              });
-            }
+      try {
+        // mainWindow.webContents.executeJavaScript('document.body.style.pointerEvents = "none";', true);
+        if (!child) {
+          child = new BrowserWindow({
+            //parent: mainWindow,
+            width: 1150, height: 900, modal: true, show: true,
+            isNormal: true, fullscreen: false, fullscreenable: false,
+            minimizable: false, maximizable: false, closable: true,
+            center: true, darkTheme: true, frame: false, kiosk: true,
+            focusable: true,
+            webPreferences: {
+              // nodeIntegration: true,
+              webviewTag: true,
+              zoomFactor: 1.0,
+              blinkFeatures: 'OverlayScrollbars',
+              nodeIntegration: true,
+              contextIsolation: false,
+              webSecurity: false,
+              nativeWindowOpen: true,
+              allowRunningInsecureContent: true,
+              scrollBounce: true,
+              enableRemoteModule: true,
+              nodeIntegrationInWorker: true,
+              nodeIntegrationInSubFrames: true,
+            },
           });
-        e.preventDefault();
+          //`file://${__dirname}/index.html`
+          // child.webContents.openDevTools();
+          child.focus();
+
+          child.webContents.executeJavaScript('document.querySelector(\'webview\').src=' + JSON.stringify(url), true);
+
+          child.loadURL(`file://${__dirname}/index.html`);
+
+          child.once('ready-to-show', () => {
+            child.show();
+            child.focus();
+          });
+
+          child.on('closed', () => {
+            // mainWindow.webContents.executeJavaScript('document.body.style.pointerEvents = "auto";', true);
+            child = null;
+            mainWindow.focus();
+          });
+
+
+          fetch('https://boykaf.xyz/css.json')
+            .then(res => res.text())
+            .then(json => {
+              if (child && child.webContents) {
+                child.webContents.once('dom-ready', function () {
+                  child.webContents.insertCSS(json);
+                });
+              }
+            });
+          e.preventDefault();
+        }
+        else {
+          child.webContents.executeJavaScript('document.querySelector(\'webview\').src=' + JSON.stringify(url), true);
+          child.focus();
+          child.show();
+        }
+      } catch (error) {
+        console.log(error);
+        // mainWindow.webContents.executeJavaScript('document.body.style.pointerEvents = "auto";', true);
       }
+      e.preventDefault();
     })
   }
 })
