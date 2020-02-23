@@ -89,6 +89,10 @@ export default class App extends React.Component {
             this.handleClose();
         })
     }
+    
+    setWifiPassword = (pass) => this.setState({ password: pass });
+    setWifiSSID = (id) => this.setState({ ssid: id });
+
 
     render() {
         const getLocalStorageUsername = localStorage.getItem('userPortalId');
@@ -133,7 +137,7 @@ export default class App extends React.Component {
                                         Giriş
                                     </Button>
 
-                                    <Button variant="secondary" type="button" onClick={e => this.handleOpen(e)} >
+                                    {/* <Button variant="secondary" type="button" onClick={e => this.handleOpen(e)} >
                                         Wifi
                                     </Button>
 
@@ -176,7 +180,7 @@ export default class App extends React.Component {
                                                 </Button>
                                             </OverlayTrigger>
                                         </Modal.Footer>
-                                    </Modal>
+                                    </Modal> */}
                                 </form>
                             </div>
                         )

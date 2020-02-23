@@ -5,6 +5,8 @@ const axios = require('axios');
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const publicIp = require('public-ip');
+const localIpUrl = require('local-ip-url');
+
 
 //const url = "http://localhost:5000/";
 const url = "https://api.boykaf.xyz/";
@@ -44,10 +46,12 @@ export default class Content extends React.Component {
         }
 
         this.ipv4().then(result => {
-            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + result)
+            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localIpUrl('public', 'ipv4'))
                 .then(ip => {
                     if (ip.data) {
                         this.setState({ ipValue: result });
+                        this.setState({ ipAddress: localIpUrl('public', 'ipv4') });
+
                     }
                 })
         });
@@ -105,21 +109,43 @@ export default class Content extends React.Component {
     handleSave = () => {
         localStorage.setItem("SSID", this.state.ssid);
         localStorage.setItem("Password", this.state.password);
+        // ipcRenderer.invoke('set-wifi-names', null).then((result) => {
+        //     this.handleClose();
+        // })
         ipcRenderer.invoke('set-wifi-names', null).then((result) => {
             this.handleClose();
+        })
+        ipcRenderer.invoke('main-url', null).then((result) => {
         })
     }
 
     refresh = (e) => {
         e.preventDefault();
         window.location.reload();
+        ipcRenderer.invoke('refresh-internet', null).then((result) => {
+            this.handleClose();
+        })
     }
 
-    refreshWifi = () => {
-        ipcRenderer.invoke('get-wifi-names', null).then((result) => {
-            console.log(result);
-            this.setState({ wifiList: result });
+    linkClick=()=>{
+        ipcRenderer.invoke('otherlink', null).then((result) => {
         })
+    }
+
+    // refreshWifi = () => {
+    //     ipcRenderer.invoke('get-wifi-names', null).then((result) => {
+    //         console.log(result);
+    //         if (result !== null)
+    //             this.setState({ wifiList: result });
+    //         else
+    //             this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
+    //     })
+
+    // }
+
+    refreshWifi = async () => {
+        var result = await ipcRenderer.invoke('get-wifi-names', null);
+        this.setState({ wifiList: result });
     }
 
     shutdown = () => {
@@ -174,7 +200,7 @@ export default class Content extends React.Component {
 
                             </OverlayTrigger>
 
-                            <OverlayTrigger
+                            {/* <OverlayTrigger
                                 key="top2"
                                 placement="top"
                                 overlay={
@@ -184,16 +210,16 @@ export default class Content extends React.Component {
                                     <WifiOutlined></WifiOutlined>
                                 </Button>
 
-                            </OverlayTrigger>
+                            </OverlayTrigger> */}
                         </div>
                         <Modal show={this.state.show} onHide={this.handleClose}>
                             <Modal.Header closeButton>
-                                <Modal.Title>Kablosuz İnternet(Wifi) - {this.state.ipValue}</Modal.Title>
+                                <Modal.Title>Wifi - {this.state.ipValue} - {this.state.ipAddress} </Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
                                 <ListGroup defaultActiveKey="#link1">
                                     {
-                                        this.state.wifiList &&
+                                        this.state.wifiList && this.state.wifiList.map &&
                                         this.state.wifiList.map((data) =>
                                             <ListGroup.Item key={data.ssid} action style={{ fontSize: 12, padding: 0, margin: 0, height: 39 }} onSelect={() => this.setWifiSSID(data.ssid)}>
                                                 <InputGroup className="mb-3">
