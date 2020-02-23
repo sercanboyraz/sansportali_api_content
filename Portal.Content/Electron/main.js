@@ -84,13 +84,12 @@ function createWindow() {
     }
     else {
       mainWindow.setFullScreen(true);
-      // Menu.setApplicationMenu(null);
+      Menu.setApplicationMenu(null);
     }
   })
-  setMainMenu();
 
-  //mainWindow.loadURL('https://boykaf.xyz/');
-  mainWindow.loadURL('http://localhost:3000/');
+  mainWindow.loadURL('https://boykaf.xyz/');
+  //mainWindow.loadURL('http://localhost:3000/');
 }
 app.on('web-contents-created', (e, contents) => {
   e.preventDefault();
