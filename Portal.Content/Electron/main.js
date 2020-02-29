@@ -1,6 +1,7 @@
 const electron = require('electron');
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
+const sessiondata = electron.Cookies;
 const path = require('path');
 const { ipcMain, Menu } = require('electron')
 const fetch = require('node-fetch');
@@ -136,7 +137,6 @@ app.on('web-contents-created', (e, contents) => {
           });
 
           child.on('closed', () => {
-            // mainWindow.webContents.executeJavaScript('document.body.style.pointerEvents = "auto";', true);
             child = null;
             mainWindow.focus();
           });
@@ -219,7 +219,6 @@ ipcMain.handle('refresh-internet', async (event, someArgument) => {
     }
   });
 })
-
 
 ipcMain.handle('otherlink', async (event, someArgument) => {
   return child ? true : false;
