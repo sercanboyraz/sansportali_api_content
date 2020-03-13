@@ -56,13 +56,13 @@ export default class Content extends React.Component {
                 })
         });
 
-        var webview = document.getElementById('webview');
-        webview.addEventListener('dom-ready', function () {
-            webview.insertCSS(".popupLoginMain,.footerContainer,.headerLogin,.modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
-            webview.insertCSS(".coupon__bottom-line  { display:block; } ");
-            webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
-            webview.insertCSS(".coupon__select-box  { width: 100%; } ");
-        });
+        // var webview = document.getElementById('webview');
+        // webview.addEventListener('dom-ready', function () {
+        //     webview.insertCSS(".popupLoginMain,.footerContainer,.headerLogin,.modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
+        //     webview.insertCSS(".coupon__bottom-line  { display:block; } ");
+        //     webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
+        //     webview.insertCSS(".coupon__select-box  { width: 100%; } ");
+        // });
 
         window.addEventListener('load', (event) => {
             let webview = document.querySelector('webview');
@@ -107,14 +107,6 @@ export default class Content extends React.Component {
     }
 
     handleSave = () => {
-        localStorage.setItem("SSID", this.state.ssid);
-        localStorage.setItem("Password", this.state.password);
-        // ipcRenderer.invoke('set-wifi-names', null).then((result) => {
-        //     this.handleClose();
-        // })
-        ipcRenderer.invoke('set-wifi-names', null).then((result) => {
-            this.handleClose();
-        })
         ipcRenderer.invoke('main-url', null).then((result) => {
         })
     }
@@ -132,30 +124,11 @@ export default class Content extends React.Component {
         })
     }
 
-    // refreshWifi = () => {
-    //     ipcRenderer.invoke('get-wifi-names', null).then((result) => {
-    //         console.log(result);
-    //         if (result !== null)
-    //             this.setState({ wifiList: result });
-    //         else
-    //             this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
-    //     })
-
-    // }
-
-    refreshWifi = async () => {
-        var result = await ipcRenderer.invoke('get-wifi-names', null);
-        this.setState({ wifiList: result });
-    }
-
     shutdown = () => {
         ipcRenderer.invoke('shutdown_event', null).then((result) => {
 
         })
     }
-
-    setWifiPassword = (pass) => this.setState({ password: pass });
-    setWifiSSID = (id) => this.setState({ ssid: id });
 
     render() {
         const { permissions } = this.state;
@@ -212,54 +185,7 @@ export default class Content extends React.Component {
 
                             </OverlayTrigger> */}
                         </div>
-                        <Modal show={this.state.show} onHide={this.handleClose}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Wifi - {this.state.ipValue} - {this.state.ipAddress} </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <ListGroup defaultActiveKey="#link1">
-                                    {
-                                        this.state.wifiList && this.state.wifiList.map &&
-                                        this.state.wifiList.map((data) =>
-                                            <ListGroup.Item key={data.ssid} action style={{ fontSize: 12, padding: 0, margin: 0, height: 39 }} onSelect={() => this.setWifiSSID(data.ssid)}>
-                                                <InputGroup className="mb-3">
-                                                    <InputGroup.Prepend>
-                                                        <InputGroup.Text id="basic-addon3" style={{ width: 250 }}>
-                                                            {
-                                                                data.ssid
-                                                            }
-                                                        </InputGroup.Text>
-                                                    </InputGroup.Prepend>
-                                                    <FormControl id={data.ssid} type="password" aria-describedby="basic-addon3" onChange={(e) => this.setWifiPassword(e.target.value)} onClick={() => this.setWifiSSID(data.ssid)} />
-                                                </InputGroup>
-                                            </ListGroup.Item>
-                                        )
-                                    }
-                                </ListGroup>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <OverlayTrigger
-                                    key="top3"
-                                    placement="top"
-                                    overlay={
-                                        <Tooltip id={`tooltip-LoopOutlineds`}><strong>Wifi Tara</strong></Tooltip>
-                                    }>
-                                    <Button variant="secondary" onClick={() => this.refreshWifi()} style={{ position: "absolute", left: 10, bottom: 11 }}>
-                                        <LoopOutlined></LoopOutlined>
-                                    </Button>
-                                </OverlayTrigger>
-                                <OverlayTrigger
-                                    key="top4"
-                                    placement="top"
-                                    overlay={
-                                        <Tooltip id={`tooltip-DoneAlls`}><strong>Kaydet</strong></Tooltip>
-                                    }>
-                                    <Button variant="primary" onClick={() => this.handleSave()}>
-                                        <DoneAll></DoneAll>
-                                    </Button>
-                                </OverlayTrigger>
-                            </Modal.Footer>
-                        </Modal>
+                        
                         <Modal show={this.state.showShutdown} onHide={this.handleCloseShutdown}>
                             <Modal.Header closeButton>
                                 <Modal.Title>Kapat</Modal.Title>
