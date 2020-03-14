@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.Core", "Portal.Core\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portal.Content", "Portal.Content\Portal.Content.csproj", "{EE878CB8-392B-4CF7-A1AB-6329D81D557C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portal.Iddaa", "Portal.Iddaa\Portal.Iddaa.csproj", "{5D9B6AD5-1117-4EA7-9723-394C45B9D412}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EE878CB8-392B-4CF7-A1AB-6329D81D557C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE878CB8-392B-4CF7-A1AB-6329D81D557C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE878CB8-392B-4CF7-A1AB-6329D81D557C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D9B6AD5-1117-4EA7-9723-394C45B9D412}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D9B6AD5-1117-4EA7-9723-394C45B9D412}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D9B6AD5-1117-4EA7-9723-394C45B9D412}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D9B6AD5-1117-4EA7-9723-394C45B9D412}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
