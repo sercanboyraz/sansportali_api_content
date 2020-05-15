@@ -37,7 +37,7 @@ function setMainMenu() {
             shutdown.shutdown();
           }
         },
-        // { role: 'toggledevtools' }
+        //{ role: 'toggledevtools' }
       ]
     }
   ];
@@ -75,8 +75,8 @@ function createWindow() {
     isFullScreenable: true,
     isKiosk: true,
     enableLargerThanScreen: true,
+    skipTaskbar: true,
   });
-
   isOnline().then(result => {
     if (!result) {
       mainWindow.maximize();
@@ -88,8 +88,9 @@ function createWindow() {
       Menu.setApplicationMenu(null);
     }
   })
-
+ 
   mainWindow.loadURL('https://boykaf.xyz/');
+  mainWindow.focus();
   //mainWindow.loadURL('http://localhost:3000/');
 }
 
@@ -106,7 +107,14 @@ app.on('web-contents-created', (e, contents) => {
             isNormal: true, fullscreen: false, fullscreenable: false,
             minimizable: false, maximizable: false, closable: true,
             center: true, darkTheme: true, frame: false, kiosk: true,
-            focusable: true,
+            focusable: true, movable: true, skipTaskbar: true, autoHideMenuBar: true,
+            fullscreen: true,
+            maximizable: false,
+            minimizable: false,
+            simpleFullscreen: true,
+            isKiosk: true,
+            enableLargerThanScreen: true,
+            skipTaskbar: true,
             webPreferences: {
               // nodeIntegration: true,
               webviewTag: true,

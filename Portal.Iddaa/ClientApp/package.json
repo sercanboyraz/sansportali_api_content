@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "clean": "^4.0.2",
     "connected-react-router": "6.5.2",
     "history": "4.10.1",
     "jquery": "^3.4.1",
