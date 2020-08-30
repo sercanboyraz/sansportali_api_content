@@ -13,6 +13,7 @@ namespace Portal.Core
         public string WebUrl { get; set; }
         public string LogoUrl { get; set; }
         public int OrderNo { get; set; }
+        public int CreatedById { get; set; }
 
         internal AppDb Db { get; set; }
 

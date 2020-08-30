@@ -21,17 +21,20 @@ namespace Portal.Core.Query
 
         public async Task<int> AddIP(int userId, string ipv4, string ipv6)
         {
+            var getDate = DateTime.Now;
             var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"INSERT INTO RaspbianIP
                                 (
                                 `UserId`,
                                 `IPV4`,
-                                `IPV6`)
+                                `IPV6`,
+                                `Date`)
                                 VALUES
                                 (
                                 @UserId,
                                 @IPV4,
-                                @IPV6)";
+                                @IPV6,
+                                @Date)";
 
             cmd.Parameters.Add(new MySqlParameter
             {
@@ -51,6 +54,13 @@ namespace Portal.Core.Query
                 ParameterName = "@IPV6",
                 DbType = DbType.String,
                 Value = ipv6,
+            });
+
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@Date",
+                DbType = DbType.DateTime2,
+                Value = getDate,
             });
             var ttt = await cmd.ExecuteNonQueryAsync();
             return ttt;

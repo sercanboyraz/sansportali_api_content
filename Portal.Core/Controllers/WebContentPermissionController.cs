@@ -27,5 +27,26 @@ namespace Portal.Core.Controllers
             return new OkObjectResult(result);
         }
 
+
+        [HttpGet("GetAllPermission")]
+        public async Task<IActionResult> GetAllPermission()
+        {
+            await Db.Connection.OpenAsync();
+            var query = new WebContentPermissionQuery(Db);
+            var result = await query.FindAllAsync();
+            if (result is null)
+                return new NotFoundResult();
+            return new OkObjectResult(result);
+        }
+
+        [HttpGet("AddOrDelete")]
+        public async Task<IActionResult> AddOrDeleteAsync(int websiteid, int userid, bool isadd)
+        {
+            await Db.Connection.OpenAsync();
+            var query = new WebContentPermissionQuery(Db);
+            var result = await query.AddOrDeleteAsync(websiteid,userid,isadd);
+            return new OkObjectResult(result);
+        }
+
     }
 }

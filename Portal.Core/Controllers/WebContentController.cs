@@ -16,16 +16,27 @@ namespace Portal.Core.Controllers
             Db = db;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetNamePassword(string username, string password)
-        //{
-        //    await Db.Connection.OpenAsync();
-        //    var query = new UsersQuery(Db);
-        //    var result = await query.FindOneAsync(username, password);
-        //    if (result is null)
-        //        return new NotFoundResult();
-        //    return new OkObjectResult(result);
-        //}
+        [HttpGet("addwebcontent")]
+        public async Task<IActionResult> AddWebContent(string websitename, string websiteaddress,int userid)
+        {
+            await Db.Connection.OpenAsync();
+            var query = new WebContentQuery(Db);
+            var result = await query.AddWebContent(websitename, websiteaddress, userid);
+            if (result is null)
+                return new NotFoundResult();
+            return new OkObjectResult(result);
+        }
+
+        [HttpGet("AllPermission")]
+        public async Task<IActionResult> AllPermission(int userid)
+        {
+            await Db.Connection.OpenAsync();
+            var query = new WebContentQuery(Db);
+            var result = await query.FindAllAsync(userid);
+            if (result is null)
+                return new NotFoundResult();
+            return new OkObjectResult(result);
+        }
 
     }
 }

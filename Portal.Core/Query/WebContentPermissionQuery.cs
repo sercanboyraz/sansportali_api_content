@@ -20,11 +20,11 @@ namespace Portal.Core
         public async Task<List<WebContentPermission>> FindAsync(int userid)
         {
             var cmd = Db.Connection.CreateCommand();
-            cmd.CommandText = @"SELECT `webcontentpermission`.`Id`,`UserId`,`WebContentId`,`WebUrl`,`LogoUrl`,`Name`,`DisplayName` 
+            cmd.CommandText = @"SELECT `webcontentpermission`.`Id`,`webcontentpermission`.`UserId`,`WebContentId`,`WebUrl`,`LogoUrl`,`Name`,`DisplayName` 
                                 FROM `webcontentpermission` 
                                 INNER JOIN `webcontent` 
                                 ON `WebContentId` = `webcontent`.`Id` 
-                                WHERE `UserId` = @userid Order By OrderNo";
+                                WHERE `webcontentpermission`.`UserId` = @userid Order By OrderNo";
             cmd.Parameters.Add(new MySqlParameter
             {
                 ParameterName = "@userid",
@@ -34,6 +34,73 @@ namespace Portal.Core
             var execute = cmd.ExecuteReaderAsync();
             var resultData = ReadAllAsync(await execute).Result;
             return resultData;
+        }
+
+        public async Task<List<WebContentPermission>> FindAllAsync()
+        {
+            var cmd = Db.Connection.CreateCommand();
+            cmd.CommandText = @"SELECT `webcontentpermission`.`Id`,`webcontentpermission`.`UserId`,`WebContentId`,`WebUrl`,`LogoUrl`,`Name`,`DisplayName` 
+                                FROM `webcontentpermission` 
+                                INNER JOIN `webcontent` 
+                                ON `WebContentId` = `webcontent`.`Id` 
+                                Order By OrderNo";
+            var execute = cmd.ExecuteReaderAsync();
+            var resultData = ReadAllAsync(await execute).Result;
+            return resultData;
+        }
+
+        public async Task<int> AddOrDeleteAsync(int websiteid,int userid,bool isadd)
+        {
+            var cmd = Db.Connection.CreateCommand();
+            if (isadd)
+            {
+                cmd.CommandText = @"INSERT INTO webcontentpermission
+                                    (
+                                     `UserId`,
+                                     `WebContentId`
+                                    )
+                                    VALUES
+                                    (
+                                     @userId,
+                                     @webContentId
+                                    )";
+
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@userId",
+                    DbType = DbType.Int32,
+                    Value = userid,
+                });
+
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@webContentId",
+                    DbType = DbType.String,
+                    Value = websiteid,
+                });
+                var ttt = await cmd.ExecuteNonQueryAsync();
+                return ttt;
+            }
+            else
+            {
+                cmd.CommandText = @"DELETE FROM webcontentpermission WHERE `UserId` = @userId AND `WebContentId`= @webContentId";
+
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@userId",
+                    DbType = DbType.Int32,
+                    Value = userid,
+                });
+
+                cmd.Parameters.Add(new MySqlParameter
+                {
+                    ParameterName = "@webContentId",
+                    DbType = DbType.String,
+                    Value = websiteid,
+                });
+                var ttt = await cmd.ExecuteNonQueryAsync();
+                return ttt;
+            }
         }
 
         private async Task<List<WebContentPermission>> ReadAllAsync(System.Data.Common.DbDataReader reader)
