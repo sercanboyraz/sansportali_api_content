@@ -1,24 +1,36 @@
 import React from 'react'
-import { ListGroup, InputGroup, Button, FormControl, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { TextField,FormControlLabel,Checkbox } from '@material-ui/core'
+import { ListGroup, InputGroup, Button, FormControl, Modal, OverlayTrigger, Tooltip, Tabs, Tab, Form, Image, Card, Row, Container, Col } from 'react-bootstrap'
 import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff } from '@material-ui/icons';
 const axios = require('axios');
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const publicIp = require('public-ip');
-const localIpUrl = require('local-ip-url');
 
+const url = "http://localhost:5000/";
+//const url = "https://api.boykaf.xyz/";
 
-//const url = "http://localhost:5000/";
-const url = "https://api.boykaf.xyz/";
+const uniqid = require('uniqid');
 
 export default class Content extends React.Component {
 
     state = {
-        permissions: null,
+        permissions: [],
+        allPermission: [],
         show: false,
         showShutdown: false,
         ssid: "",
-        password: ""
+        buttonText: "",
+        selectedFile: null,
+        imageUrl: "",
+        islogin: false,
+        username: "",
+        password: "",
+        info: "",
+        error: "",
+        newwebsiteadress: "",
+        newwebsitename: ""
     }
 
     constructor(props) {
@@ -28,33 +40,48 @@ export default class Content extends React.Component {
 
     ipv4 = async () => { return publicIp.v4() };
     ipv6 = async () => { return publicIp.v6() };
-
     componentDidMount() {
+        var getLocalStorageUserId = localStorage.getItem('userPortalId');
+
+        localStorage.setItem('localguid', uniqid());
         this.setState({ permissions: this.props.permission });
         this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
 
-        var getLocalStorageUserId = localStorage.getItem('userPortalId');
-        if (getLocalStorageUserId && !this.props.permission) {
-            if (getLocalStorageUserId) {
-                axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
-                    .then(responsePermission => {
-                        if (responsePermission.data) {
-                            this.setState({ permissions: responsePermission.data });
-                        }
-                    })
-            }
-        }
+        this.permissionset();
+
+        axios.get(url + 'webContent/allpermission?userid=' + getLocalStorageUserId)
+            .then(responsePermission => {
+                if (responsePermission.data) {
+                    this.setState({ allPermission: responsePermission.data });
+                }
+            })
 
         this.ipv4().then(result => {
-            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localIpUrl('public', 'ipv4'))
+            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
                 .then(ip => {
                     if (ip.data) {
                         this.setState({ ipValue: result });
-                        this.setState({ ipAddress: localIpUrl('public', 'ipv4') });
-
+                        this.setState({ ipAddress: '' });
                     }
                 })
         });
+
+        this.ipv4().then(result => {
+            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
+                .then(ip => {
+                    if (ip.data) {
+                        this.setState({ ipValue: result });
+                        this.setState({ ipAddress: '' });
+                    }
+                })
+        });
+
+        axios.get(url + 'getimage?userId=' + getLocalStorageUserId)
+            .then(responsePermission => {
+                if (responsePermission.data) {
+                    this.setState({ imageUrl: responsePermission.data.DataUrl });
+                }
+            });
 
         // var webview = document.getElementById('webview');
         // webview.addEventListener('dom-ready', function () {
@@ -72,8 +99,27 @@ export default class Content extends React.Component {
             let webviewHeight = windowHeight - controlsHeight;
             webview.style.width = (windowWidth - 1) + 'px';
             webview.style.height = webviewHeight + 'px';
-
         });
+    }
+
+    permissionset=()=>{
+        var getLocalStorageUserId = localStorage.getItem('userPortalId');
+        var dataPermission = localStorage.getItem('localPermissionSetting');
+        if (dataPermission) {
+            this.setState({ permissions: dataPermission });
+        }
+        else {
+            if (getLocalStorageUserId && !this.props.permission) {
+                if (getLocalStorageUserId) {
+                    axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
+                        .then(responsePermission => {
+                            if (responsePermission.data) {
+                                this.setState({ permissions: responsePermission.data });
+                            }
+                        })
+                }
+            }
+        }
     }
 
     getControlsHeight = () => {
@@ -102,6 +148,14 @@ export default class Content extends React.Component {
         this.setState({ showShutdown: false });
     }
 
+
+    handleCloseSetting = () => {
+        this.setState({ showSetting: false });
+        this.setState({ islogin: false });
+        this.setState({ username: "" });
+        this.setState({ password: "" });
+    }
+
     handleShow = () => {
         this.setState({ show: true });
     }
@@ -119,7 +173,7 @@ export default class Content extends React.Component {
         })
     }
 
-    linkClick=()=>{
+    linkClick = () => {
         ipcRenderer.invoke('otherlink', null).then((result) => {
         })
     }
@@ -130,10 +184,92 @@ export default class Content extends React.Component {
         })
     }
 
+    handleSaveSetting = () => {
+        const data = new FormData();
+        data.append('file', this.state.selectedFile);
+
+        axios.get(url + 'setimage?userId=' + parseInt(localStorage.getItem('userPortalId')) + "&" + "database64=" + this.state.selectedFile + "&ext=" + "")
+            .then(responsePermission => {
+                if (responsePermission.data) {
+                    this.setState({ permission: responsePermission.data });
+                    this.setState({ username: "" });
+                    this.setState({ password: "" });
+                    this.setState({ error: "" });
+                    this.setState({ info: "" });
+                }
+                else {
+                    this.setState({ info: "Yetkileriniz çekilemedi" });
+                }
+            }).catch(function (error) {
+                // handle error
+                this.setState({ error: error });
+            });
+    }
+
+    onChangeHandler = event => {
+        this.setState({
+            selectedFile: event.target.files[0]
+        })
+    }
+
+    handlelogin = (event) => {
+        axios.get(url + 'users?username=' + this.state.username + '&password=' + this.state.password)
+            .then(response => {
+                if (response.data) {
+                    this.setState({ islogin: true });
+                }
+                else {
+                    this.setState({ info: "Kullanıcı adı veya şifre hatalı" });
+                }
+            })
+    }
+
+    handleisPrivateChange = (e) => {
+        if (e.target.checked) {
+            localStorage.setItem('localPermissionSetting', this.state.permissions);
+        }
+        else {
+            localStorage.removeItem('localPermissionSetting');//düzenle
+        }
+    }
+
+    changeWebSite = (e, websiteid, userid) => {
+        axios.get(url + 'webcontentpermission/addordelete?websiteid=' + websiteid + '&userid=' + userid + '&isadd=' + e.target.checked)
+            .then(response => {
+                if (response.data) {
+                    var getLocalStorageUserId = localStorage.getItem('userPortalId');
+                    if (getLocalStorageUserId) {
+                        axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
+                            .then(responsePermission => {
+                                if (responsePermission.data) {
+                                    this.setState({ permissions: responsePermission.data });
+                                    var dataPermission = localStorage.getItem('localPermissionSetting');
+                                    if (dataPermission) {
+                                        localStorage.setItem('localPermissionSetting', responsePermission.data);
+                                    }
+                                }
+                            })
+                    }
+
+                }
+            })
+    }
+
+    addnewwebsite = () => {
+        var getLocalStorageUserId = localStorage.getItem('userPortalId');
+        axios.get(url + 'webcontent/addwebcontent?websitename=' + this.state.newwebsitename + '&websiteaddress=' + this.state.newwebsiteadress + '&userid=' + getLocalStorageUserId)
+            .then(response => {
+                if (response.data) {
+                    this.setState({ allPermission: [...this.state.allPermission, response.data] })
+                    this.permissionset();
+                }
+            })
+    }
+
     render() {
         const { permissions } = this.state;
         return (
-            <div>
+            <div style={{ backgroundImage: this.state.imageUrl }}>
                 <header className="main-head" >
                     <nav className="head-nav">
                         <ul className="menu">
@@ -172,7 +308,17 @@ export default class Content extends React.Component {
                                 </Button>
 
                             </OverlayTrigger>
+                            <OverlayTrigger
+                                key="top1"
+                                placement="top"
+                                overlay={
+                                    <Tooltip id={`tooltip-LoopOutlined`}><strong>Ayarlar</strong></Tooltip>
+                                }>
+                                <Button variant="dark" onClick={e => this.setState({ showSetting: true })} id="refreshButton" style={{ marginRight: 5 }} >
+                                    <LoopOutlined></LoopOutlined>
+                                </Button>
 
+                            </OverlayTrigger>
                             {/* <OverlayTrigger
                                 key="top2"
                                 placement="top"
@@ -185,8 +331,8 @@ export default class Content extends React.Component {
 
                             </OverlayTrigger> */}
                         </div>
-                        
-                        <Modal show={this.state.showShutdown} onHide={this.handleCloseShutdown}>
+
+                        <Modal show={this.state.showShutdown} onHide={this.handleCloseShutdown}  >
                             <Modal.Header closeButton>
                                 <Modal.Title>Kapat</Modal.Title>
                             </Modal.Header>
@@ -215,6 +361,126 @@ export default class Content extends React.Component {
                                     </Button>
                                 </OverlayTrigger>
                             </Modal.Footer>
+                        </Modal>
+
+                        <Modal show={this.state.showSetting} onHide={this.handleCloseSetting} size="xl" aria-labelledby="contained-modal-title-vcenter">
+                            <Modal.Header closeButton>
+                                <Modal.Title>Ayarlar</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body >
+                                {
+                                    !this.state.islogin ?
+                                        (
+                                            <div className="Login" style={{ width: 500, margin: '0px auto' }}>
+                                                <form>
+                                                    <Form.Group >
+                                                        <Form.Label>Kullanıcı Adı</Form.Label>
+                                                        <Form.Control placeholder="Kullanıcı Adı" value={this.state.username} onChange={e => this.setState({ username: e.target.value })} />
+                                                        <Form.Text className="text-muted">Sans Portalı kullanıcı adınız.</Form.Text>
+                                                    </Form.Group>
+
+                                                    <Form.Group controlId="formBasicPassword">
+                                                        <Form.Label>Şifre</Form.Label>
+                                                        <Form.Control value={this.state.password} onChange={e => this.setState({ password: e.target.value })} type="password" placeholder="Şifre" />
+                                                        <Form.Text className="text-muted">Sans Portalı şifreniz.</Form.Text>
+                                                    </Form.Group>
+                                                    {
+                                                        this.state.error && (
+                                                            <Form.Group>
+                                                                <Form.Label style={{ color: '#FF2100' }}>{this.state.error}</Form.Label>
+                                                            </Form.Group>
+                                                        )
+                                                    }
+                                                    {
+                                                        this.state.info && (
+                                                            <Form.Group>
+                                                                <Form.Label style={{ color: '#FF2100' }}>{this.state.info}</Form.Label>
+                                                            </Form.Group>
+                                                        )
+                                                    }
+                                                    <Button variant="primary" type="button" onClick={e => this.handlelogin(e)} style={{ float: "right" }}>
+                                                        Giriş
+                                                    </Button>
+                                                </form>
+                                            </div>
+                                        )
+                                        :
+                                        (
+                                            <Tabs defaultActiveKey="main" id="uncontrolled-tab-example" >
+                                                <Tab eventKey="main" title="Ana Sayfa Resimi" >
+                                                    <Form.Group controlId="formBasicEmail">
+                                                        <Form.File name="file" id="file" label="Giriş Resmi" onChange={this.onChangeHandler} accept=".jpg, .png, .jpeg" lang="tr" />
+                                                        <Form.Text className="text-muted">
+                                                            Resimler 1920*1080 çözünürlükte olmalıdır.
+                                                        </Form.Text>
+                                                        <Image src={url + this.state.imageUrl} rounded />
+                                                    </Form.Group>
+                                                    <Form.Group>
+                                                        <OverlayTrigger key="top3" placement="top"
+                                                            overlay={<Tooltip id={`tooltip-LoopOutlineds`}><strong>İptal</strong></Tooltip>}>
+                                                            <Button variant="secondary" onClick={() => this.handleCloseSetting()}>
+                                                                <LoopOutlined></LoopOutlined>
+                                                            </Button>
+                                                        </OverlayTrigger>
+                                                        <OverlayTrigger key="top4" placement="top"
+                                                            overlay={<Tooltip id={`tooltip-DoneAlls`}><strong>Upload</strong></Tooltip>}>
+                                                            <Button variant="primary" onClick={() => this.handleSaveSetting()}>
+                                                                <DoneAll></DoneAll>
+                                                            </Button>
+                                                        </OverlayTrigger>
+                                                    </Form.Group>
+                                                </Tab>
+                                                <Tab eventKey="permission" title="Siteler" >
+                                                    <Form.Group controlId="permission">
+                                                        <Container>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Card body title="Web Sitesi Ekle">
+                                                                        <Form.Group controlId="permission">
+                                                                            <Form.Label>Web Site Adı</Form.Label>
+                                                                            <Form.Control type="text" placeholder="Adı" value={this.state.newwebsitename} />
+                                                                        </Form.Group>
+                                                                        <Form.Group controlId="permission">
+                                                                            <Form.Label>Web Site Adresi</Form.Label>
+                                                                            <Form.Control type="text" placeholder="Web Adresi" value={this.state.newwebsiteadress} />
+                                                                        </Form.Group>
+                                                                        <Button variant="primary" onClick={() => this.addnewwebsite()}>
+                                                                            <DoneAll></DoneAll>
+                                                                        </Button>
+                                                                    </Card>
+                                                                </Col>
+                                                                <Col>
+                                                                    <Form.Group>
+                                                                        <Form.Check inline label="Sadece bu bilgisayar için ayarlansın." type="switch" id="isPrivate" onChange={() => this.handleisPrivateChange()} />
+                                                                    </Form.Group>
+                                                                    <Form.Group>
+                                                                        <Form.Label>Web Siteleri</Form.Label>
+                                                                        <ListGroup backgroundColor="#708090" >
+                                                                            {
+                                                                                this.state.allPermission && this.state.allPermission.map(data => {
+                                                                                    var isCheckedValue = this.state.permissions.some(x => x.webContent.id == data.id);
+                                                                                    var getLocalStorageUserId = localStorage.getItem('userPortalId');
+                                                                                    return (
+                                                                                        <ListGroup.Item action variant="light" eventKey={data.id}>
+                                                                                            <FormControlLabel control={<Checkbox checked={isCheckedValue} onChange={(e) => this.changeWebSite(e, data.id, getLocalStorageUserId)} name="gilad" />} />
+                                                                                            {/* <input  checked={isCheckedValue} inline id="isPrivate" onChange={(e) => this.changeWebSite(e, data.id, getLocalStorageUserId)} /> */}
+                                                                                            <img src={data.logoUrl} width="40" style={{ marginLeft: 20 }} />
+                                                                                            <span>{data.displayName}</span>
+                                                                                        </ListGroup.Item>
+                                                                                    )
+                                                                                })
+                                                                            } 
+                                                                        </ListGroup>
+                                                                    </Form.Group>
+                                                                </Col>
+                                                            </Row>
+                                                        </Container>
+                                                    </Form.Group>
+                                                </Tab>
+                                            </Tabs>
+                                        )
+                                }
+                            </Modal.Body>
                         </Modal>
                     </div>
                 </header>

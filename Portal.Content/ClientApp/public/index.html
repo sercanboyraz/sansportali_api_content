@@ -192,12 +192,7 @@
         .wrap-all-the-things {
             min-height: 100%;
             height: 100%;
-            /* padding-left: 140px; */
             margin-top: 0;
-            margin-left: 83px;
-            background-size: cover;
-            background-position: center center;
-            transition: transform 400ms, opacity 400ms;
         }
 
         .Login {
@@ -215,11 +210,9 @@
 
 <body>
     <div id="root"></div>
-
     <div className="wrap-all-the-things">
-        <webview id="webview" allowpopups partition='persist:webviewsession'></webview>
+        <webview id="webview" src="./main.html" allowpopups partition='persist:webviewsession'></webview>
     </div>
-    
 </body>
 
 </html>

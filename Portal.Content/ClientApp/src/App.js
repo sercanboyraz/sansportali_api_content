@@ -8,8 +8,8 @@ const electron = window.require('electron');
 const fs = electron.remote.require('fs');
 const ipcRenderer = electron.ipcRenderer;
 
-//const url = "http://localhost:5000/";
-const url = "https://api.boykaf.xyz/";
+const url = "http://localhost:5000/";
+// const url = "https://api.boykaf.xyz/";
 export default class App extends React.Component {
 
     state = {
@@ -18,7 +18,8 @@ export default class App extends React.Component {
         password: "",
         error: "",
         info: "",
-        show: true
+        show: true ,
+        selectedFile: null
     }
 
     constructor(props) {
@@ -38,10 +39,6 @@ export default class App extends React.Component {
             console.log(result);
             this.setState({ wifiList: result });
         })
-    }
-
-    navigateTo = (url) => {
-        document.querySelector('webview').src = url;
     }
 
     handleSubmit = (event) => {
@@ -89,10 +86,11 @@ export default class App extends React.Component {
             this.handleClose();
         })
     }
-    
+
+   
+
     setWifiPassword = (pass) => this.setState({ password: pass });
     setWifiSSID = (id) => this.setState({ ssid: id });
-
 
     render() {
         const getLocalStorageUsername = localStorage.getItem('userPortalId');
@@ -181,6 +179,7 @@ export default class App extends React.Component {
                                             </OverlayTrigger>
                                         </Modal.Footer>
                                     </Modal> */}
+
                                 </form>
                             </div>
                         )
