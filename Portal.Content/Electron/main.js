@@ -7,6 +7,7 @@ const { ipcMain, Menu } = require('electron')
 const fetch = require('node-fetch');
 const shutdown = require('electron-shutdown-command');
 const isOnline = require('is-online');
+let devtools = null
 
 function setMainMenu() {
   const template = [
@@ -77,6 +78,8 @@ function createWindow() {
     enableLargerThanScreen: true,
     skipTaskbar: true,
   });
+  devtools = new BrowserWindow()
+
   isOnline().then(result => {
     if (!result) {
       mainWindow.maximize();
@@ -89,9 +92,12 @@ function createWindow() {
     }
   })
  
-  mainWindow.loadURL('https://boykaf.xyz/');
+  // mainWindow.loadURL('https://boykaf.xyz/');
+
   mainWindow.focus();
-  //mainWindow.loadURL('http://localhost:3000/');
+  mainWindow.loadURL('http://localhost:3000/');
+  mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
+  mainWindow.webContents.openDevTools({ mode: 'detach' })
 }
 
 app.on('web-contents-created', (e, contents) => {

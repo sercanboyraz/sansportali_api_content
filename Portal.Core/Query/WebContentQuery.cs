@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections.Generic;                                                                                       
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Linq;
@@ -19,6 +19,10 @@ namespace Portal.Core
 
         public async Task<WebContent> AddWebContent(string websitename, string websiteaddress, int userid)
         {
+            if (!websiteaddress.StartsWith("http"))
+            {
+                websiteaddress = "http://" + websiteaddress;
+            }
             var getDate = new WebContent();
             var cmd = Db.Connection.CreateCommand();
             cmd.CommandText = @"INSERT INTO `webcontent`

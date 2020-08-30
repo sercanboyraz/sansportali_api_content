@@ -1,8 +1,9 @@
 import React from 'react'
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { TextField,FormControlLabel,Checkbox } from '@material-ui/core'
+import { TextField, FormControlLabel, Checkbox } from '@material-ui/core'
 import { ListGroup, InputGroup, Button, FormControl, Modal, OverlayTrigger, Tooltip, Tabs, Tab, Form, Image, Card, Row, Container, Col } from 'react-bootstrap'
 import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff } from '@material-ui/icons';
+import FileBase64 from 'react-file-base64';
 const axios = require('axios');
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -23,14 +24,16 @@ export default class Content extends React.Component {
         ssid: "",
         buttonText: "",
         selectedFile: null,
-        imageUrl: "",
+        imageUrl: "assets/icons/images/sansliplatform3.png",
         islogin: false,
         username: "",
         password: "",
         info: "",
         error: "",
         newwebsiteadress: "",
-        newwebsitename: ""
+        newwebsitename: "",
+        isChecked: false,
+        files: []
     }
 
     constructor(props) {
@@ -76,7 +79,7 @@ export default class Content extends React.Component {
                 })
         });
 
-        axios.get(url + 'getimage?userId=' + getLocalStorageUserId)
+        axios.get(url + 'image?userId=' + getLocalStorageUserId)
             .then(responsePermission => {
                 if (responsePermission.data) {
                     this.setState({ imageUrl: responsePermission.data.DataUrl });
@@ -102,11 +105,11 @@ export default class Content extends React.Component {
         });
     }
 
-    permissionset=()=>{
+    permissionset = () => {
         var getLocalStorageUserId = localStorage.getItem('userPortalId');
         var dataPermission = localStorage.getItem('localPermissionSetting');
         if (dataPermission) {
-            this.setState({ permissions: dataPermission });
+            this.setState({ permissions: JSON.parse(dataPermission), isChecked: true });
         }
         else {
             if (getLocalStorageUserId && !this.props.permission) {
@@ -184,11 +187,11 @@ export default class Content extends React.Component {
         })
     }
 
-    handleSaveSetting = () => {
+    handleSaveSetting = (datas) => {
         const data = new FormData();
-        data.append('file', this.state.selectedFile);
+        data.append('file', datas);
 
-        axios.get(url + 'setimage?userId=' + parseInt(localStorage.getItem('userPortalId')) + "&" + "database64=" + this.state.selectedFile + "&ext=" + "")
+        axios.post(url + 'image/setimage?userId=' + parseInt(localStorage.getItem('userPortalId')) + "&ext=" + "dsfdsfdfs" + "&datebase64=" + this.state.selectedFile)
             .then(responsePermission => {
                 if (responsePermission.data) {
                     this.setState({ permission: responsePermission.data });
@@ -202,7 +205,7 @@ export default class Content extends React.Component {
                 }
             }).catch(function (error) {
                 // handle error
-                this.setState({ error: error });
+                // this.setState({ error: error });
             });
     }
 
@@ -226,33 +229,47 @@ export default class Content extends React.Component {
 
     handleisPrivateChange = (e) => {
         if (e.target.checked) {
-            localStorage.setItem('localPermissionSetting', this.state.permissions);
+            localStorage.setItem('localPermissionSetting', JSON.stringify(this.state.permissions));
+            this.setState({ isChecked: true });
         }
         else {
             localStorage.removeItem('localPermissionSetting');//düzenle
+            this.setState({ isChecked: false });
         }
     }
 
-    changeWebSite = (e, websiteid, userid) => {
-        axios.get(url + 'webcontentpermission/addordelete?websiteid=' + websiteid + '&userid=' + userid + '&isadd=' + e.target.checked)
-            .then(response => {
-                if (response.data) {
-                    var getLocalStorageUserId = localStorage.getItem('userPortalId');
-                    if (getLocalStorageUserId) {
-                        axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
-                            .then(responsePermission => {
-                                if (responsePermission.data) {
-                                    this.setState({ permissions: responsePermission.data });
-                                    var dataPermission = localStorage.getItem('localPermissionSetting');
-                                    if (dataPermission) {
-                                        localStorage.setItem('localPermissionSetting', responsePermission.data);
-                                    }
-                                }
-                            })
-                    }
+    changeWebSite = (e, website, userid) => {
 
-                }
-            })
+        var tt = localStorage.getItem('localPermissionSetting');
+        if (tt) {
+            if (e.target.checked) {
+                var data = { webContentId: website.id, webContent: website, userId: userid };
+                var dataSty = [...this.state.permissions, data]
+                this.setState({ permissions: dataSty });
+                localStorage.setItem('localPermissionSetting', JSON.stringify(dataSty));
+            }
+            else {
+                var tss = this.state.permissions.filter(x => x.webContentId !== website.id);
+                this.setState({ permissions: tss });
+                localStorage.setItem('localPermissionSetting', JSON.stringify(tss));
+            }
+        }
+        else {
+            axios.get(url + 'webcontentpermission/addordelete?websiteid=' + website.id + '&userid=' + userid + '&isadd=' + e.target.checked)
+                .then(response => {
+                    if (response.data) {
+                        var getLocalStorageUserId = localStorage.getItem('userPortalId');
+                        if (getLocalStorageUserId) {
+                            axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
+                                .then(responsePermission => {
+                                    if (responsePermission.data) {
+                                        this.setState({ permissions: responsePermission.data });
+                                    }
+                                })
+                        }
+                    }
+                })
+        }
     }
 
     addnewwebsite = () => {
@@ -260,7 +277,7 @@ export default class Content extends React.Component {
         axios.get(url + 'webcontent/addwebcontent?websitename=' + this.state.newwebsitename + '&websiteaddress=' + this.state.newwebsiteadress + '&userid=' + getLocalStorageUserId)
             .then(response => {
                 if (response.data) {
-                    this.setState({ allPermission: [...this.state.allPermission, response.data] })
+                    this.setState({ allPermission: [...this.state.allPermission, response.data], newwebsitename: "", newwebsiteadress: "" })
                     this.permissionset();
                 }
             })
@@ -406,14 +423,15 @@ export default class Content extends React.Component {
                                         )
                                         :
                                         (
-                                            <Tabs defaultActiveKey="main" id="uncontrolled-tab-example" >
+                                            <Tabs defaultActiveKey="permission" id="uncontrolled-tab-example" >
                                                 <Tab eventKey="main" title="Ana Sayfa Resimi" >
-                                                    <Form.Group controlId="formBasicEmail">
+                                                    <Form.Group controlId="formBasicEmail" aria-disabled>
                                                         <Form.File name="file" id="file" label="Giriş Resmi" onChange={this.onChangeHandler} accept=".jpg, .png, .jpeg" lang="tr" />
+                                                        <FileBase64 multiple={ false } onDone={ this.handleSaveSetting.bind(this) } label="Giriş Resmi" />
                                                         <Form.Text className="text-muted">
                                                             Resimler 1920*1080 çözünürlükte olmalıdır.
                                                         </Form.Text>
-                                                        <Image src={url + this.state.imageUrl} rounded />
+                                                        <Image src={this.state.imageUrl} rounded width={700} height={500} />
                                                     </Form.Group>
                                                     <Form.Group>
                                                         <OverlayTrigger key="top3" placement="top"
@@ -438,11 +456,11 @@ export default class Content extends React.Component {
                                                                     <Card body title="Web Sitesi Ekle">
                                                                         <Form.Group controlId="permission">
                                                                             <Form.Label>Web Site Adı</Form.Label>
-                                                                            <Form.Control type="text" placeholder="Adı" value={this.state.newwebsitename} />
+                                                                            <Form.Control type="text" placeholder="Adı" value={this.state.newwebsitename} onChange={(e) => this.setState({ newwebsitename: e.target.value })} />
                                                                         </Form.Group>
                                                                         <Form.Group controlId="permission">
                                                                             <Form.Label>Web Site Adresi</Form.Label>
-                                                                            <Form.Control type="text" placeholder="Web Adresi" value={this.state.newwebsiteadress} />
+                                                                            <Form.Control type="text" placeholder="Web Adresi" value={this.state.newwebsiteadress} onChange={(e) => this.setState({ newwebsiteadress: e.target.value })} />
                                                                         </Form.Group>
                                                                         <Button variant="primary" onClick={() => this.addnewwebsite()}>
                                                                             <DoneAll></DoneAll>
@@ -451,25 +469,25 @@ export default class Content extends React.Component {
                                                                 </Col>
                                                                 <Col>
                                                                     <Form.Group>
-                                                                        <Form.Check inline label="Sadece bu bilgisayar için ayarlansın." type="switch" id="isPrivate" onChange={() => this.handleisPrivateChange()} />
+                                                                        <Form.Check inline label="Sadece bu bilgisayar için ayarlansın." type="switch" id="isPrivate" onChange={(e) => this.handleisPrivateChange(e)} checked={this.state.isChecked} />
                                                                     </Form.Group>
                                                                     <Form.Group>
                                                                         <Form.Label>Web Siteleri</Form.Label>
-                                                                        <ListGroup backgroundColor="#708090" >
+                                                                        <ListGroup style={{ backgroundColor: "#708090" }} color="#708090">
                                                                             {
                                                                                 this.state.allPermission && this.state.allPermission.map(data => {
-                                                                                    var isCheckedValue = this.state.permissions.some(x => x.webContent.id == data.id);
+                                                                                    var isCheckedValue = this.state.permissions.some(x => x.webContentId == data.id);
                                                                                     var getLocalStorageUserId = localStorage.getItem('userPortalId');
                                                                                     return (
                                                                                         <ListGroup.Item action variant="light" eventKey={data.id}>
-                                                                                            <FormControlLabel control={<Checkbox checked={isCheckedValue} onChange={(e) => this.changeWebSite(e, data.id, getLocalStorageUserId)} name="gilad" />} />
+                                                                                            <FormControlLabel control={<Checkbox checked={isCheckedValue} onChange={(e) => this.changeWebSite(e, data, getLocalStorageUserId)} name="gilad" />} />
                                                                                             {/* <input  checked={isCheckedValue} inline id="isPrivate" onChange={(e) => this.changeWebSite(e, data.id, getLocalStorageUserId)} /> */}
                                                                                             <img src={data.logoUrl} width="40" style={{ marginLeft: 20 }} />
                                                                                             <span>{data.displayName}</span>
                                                                                         </ListGroup.Item>
                                                                                     )
                                                                                 })
-                                                                            } 
+                                                                            }
                                                                         </ListGroup>
                                                                     </Form.Group>
                                                                 </Col>
