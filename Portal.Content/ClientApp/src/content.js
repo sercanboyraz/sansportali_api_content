@@ -2,15 +2,15 @@ import React from 'react'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField, FormControlLabel, Checkbox } from '@material-ui/core'
 import { ListGroup, InputGroup, Button, FormControl, Modal, OverlayTrigger, Tooltip, Tabs, Tab, Form, Image, Card, Row, Container, Col } from 'react-bootstrap'
-import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff } from '@material-ui/icons';
+import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff,SettingsOutlined } from '@material-ui/icons';
 import FileBase64 from 'react-file-base64';
 const axios = require('axios');
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const publicIp = require('public-ip');
 
-const url = "http://localhost:5000/";
-//const url = "https://api.boykaf.xyz/";
+// const url = "http://localhost:5000/";
+const url = "https://api.boykaf.xyz/";
 
 const uniqid = require('uniqid');
 
@@ -332,7 +332,7 @@ export default class Content extends React.Component {
                                     <Tooltip id={`tooltip-LoopOutlined`}><strong>Ayarlar</strong></Tooltip>
                                 }>
                                 <Button variant="dark" onClick={e => this.setState({ showSetting: true })} id="refreshButton" style={{ marginRight: 5 }} >
-                                    <LoopOutlined></LoopOutlined>
+                                    <SettingsOutlined></SettingsOutlined>
                                 </Button>
 
                             </OverlayTrigger>
@@ -424,7 +424,7 @@ export default class Content extends React.Component {
                                         :
                                         (
                                             <Tabs defaultActiveKey="permission" id="uncontrolled-tab-example" >
-                                                <Tab eventKey="main" title="Ana Sayfa Resimi" >
+                                                <Tab eventKey="main" title="Ana Sayfa Resimi" disabled>
                                                     <Form.Group controlId="formBasicEmail" aria-disabled>
                                                         <Form.File name="file" id="file" label="Giriş Resmi" onChange={this.onChangeHandler} accept=".jpg, .png, .jpeg" lang="tr" />
                                                         <FileBase64 multiple={ false } onDone={ this.handleSaveSetting.bind(this) } label="Giriş Resmi" />
