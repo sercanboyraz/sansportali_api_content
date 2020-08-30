@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "1NMhjtidk8b7yBUiSuJ5XewD8y8o6IXFLUOjUZtjracJmRAd7dy0jTOq6TxLRz3fIOy1AMsolsL59ttRSpoHIA==",
+  "dgSpecHash": "qtDZHHxcdbhkgxYmiaa3nVsaEyOllrTdn3XI/CD/n+cyKJJXWPdJHXs9YSA2xfEkrABReZ/dD67yG6Qla7plBQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\sercan\\source\\repos\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
   "expectedPackageFiles": [
@@ -179,7 +179,6 @@
     "C:\\Users\\sercan\\.nuget\\packages\\microsoft.netcore.dotnethostresolver\\2.2.0\\microsoft.netcore.dotnethostresolver.2.2.0.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\microsoft.netcore.platforms\\3.0.0\\microsoft.netcore.platforms.3.0.0.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\microsoft.netcore.targets\\2.0.0\\microsoft.netcore.targets.2.0.0.nupkg.sha512",
-    "C:\\Users\\sercan\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.design\\3.1.4\\microsoft.visualstudio.web.codegeneration.design.3.1.4.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\microsoft.win32.registry\\4.5.0\\microsoft.win32.registry.4.5.0.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\mysql.data\\8.0.21\\mysql.data.8.0.21.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
@@ -305,16 +304,5 @@
     "C:\\Users\\sercan\\.nuget\\packages\\system.xml.xpath.xdocument\\4.3.0\\system.xml.xpath.xdocument.4.3.0.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\system.xml.xpath.xmldocument\\4.0.1\\system.xml.xpath.xmldocument.4.0.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1701",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'Microsoft.VisualStudio.Web.CodeGeneration.Design 3.1.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v2.2'. This package may not be fully compatible with your project.",
-      "libraryId": "Microsoft.VisualStudio.Web.CodeGeneration.Design",
-      "targetGraphs": [
-        ".NETCoreApp,Version=v2.2"
-      ]
-    }
-  ]
+  "logs": []
 }

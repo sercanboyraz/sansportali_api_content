@@ -59,7 +59,7 @@ export default class App extends React.Component {
 
     getPermissionHandle = (getLocalStorageUser) => {
         if (getLocalStorageUser) {
-            axios.get(url + 'webContentPermission?userId=' + getLocalStorageUser)
+            axios.get(url + 'webcontentpermission?userId=' + getLocalStorageUser)
                 .then(responsePermission => {
 
                     if (responsePermission.data) {

@@ -92,10 +92,10 @@ function createWindow() {
     }
   })
  
-  // mainWindow.loadURL('https://boykaf.xyz/');
+  mainWindow.loadURL('https://boykaf.xyz/');
 
   mainWindow.focus();
-  mainWindow.loadURL('http://localhost:3000/');
+  // mainWindow.loadURL('http://localhost:3000/');
   mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
   mainWindow.webContents.openDevTools({ mode: 'detach' })
 }

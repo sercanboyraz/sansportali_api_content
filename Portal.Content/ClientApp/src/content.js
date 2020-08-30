@@ -52,7 +52,7 @@ export default class Content extends React.Component {
 
         this.permissionset();
 
-        axios.get(url + 'webContent/allpermission?userid=' + getLocalStorageUserId)
+        axios.get(url + 'webcontent/allpermission?userid=' + getLocalStorageUserId)
             .then(responsePermission => {
                 if (responsePermission.data) {
                     this.setState({ allPermission: responsePermission.data });
@@ -60,7 +60,7 @@ export default class Content extends React.Component {
             })
 
         this.ipv4().then(result => {
-            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
+            axios.post(url + 'raspianip?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
                 .then(ip => {
                     if (ip.data) {
                         this.setState({ ipValue: result });
@@ -70,7 +70,7 @@ export default class Content extends React.Component {
         });
 
         this.ipv4().then(result => {
-            axios.post(url + 'RaspianIP?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
+            axios.post(url + 'raspianip?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
                 .then(ip => {
                     if (ip.data) {
                         this.setState({ ipValue: result });
@@ -114,7 +114,7 @@ export default class Content extends React.Component {
         else {
             if (getLocalStorageUserId && !this.props.permission) {
                 if (getLocalStorageUserId) {
-                    axios.get(url + 'webContentPermission?userId=' + getLocalStorageUserId)
+                    axios.get(url + 'webcontentpermission?userId=' + getLocalStorageUserId)
                         .then(responsePermission => {
                             if (responsePermission.data) {
                                 this.setState({ permissions: responsePermission.data });
