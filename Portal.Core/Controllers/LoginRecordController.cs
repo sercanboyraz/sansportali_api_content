@@ -27,5 +27,16 @@ namespace Portal.Core.Controllers
             return new OkObjectResult(result);
         }
 
+        [HttpGet("userid")]
+        public async Task<IActionResult> GetNamePasswordUserId(int userId)
+        {
+            await Db.Connection.OpenAsync();
+            var query = new UsersQuery(Db);
+            var result = await query.FindOneUserIdAsync(userId);
+            if (result is null)
+                return new OkObjectResult(new Users());
+            return new OkObjectResult(result);
+        }
+
     }
 }

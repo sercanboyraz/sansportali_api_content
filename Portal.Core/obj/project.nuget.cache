@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qtDZHHxcdbhkgxYmiaa3nVsaEyOllrTdn3XI/CD/n+cyKJJXWPdJHXs9YSA2xfEkrABReZ/dD67yG6Qla7plBQ==",
+  "dgSpecHash": "/SiJPlJkC2dP5+7onPASmhivnkFxjw2qp+S0G1CgroDoWJOBL4CCOv657/objup6m3r4wE8ro9J58qV2KwRHWA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\sercan\\source\\repos\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
+  "projectFilePath": "C:\\Users\\sercan\\Source\\Repos\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sercan\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\sercan\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",

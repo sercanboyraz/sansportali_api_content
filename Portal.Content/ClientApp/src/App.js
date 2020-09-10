@@ -8,7 +8,7 @@ const electron = window.require('electron');
 const fs = electron.remote.require('fs');
 const ipcRenderer = electron.ipcRenderer;
 
-// const url = "http://localhost:5000/";
+//const url = "http://localhost:5000/";
 const url = "https://api.boykaf.xyz/";
 export default class App extends React.Component {
 
@@ -18,12 +18,25 @@ export default class App extends React.Component {
         password: "",
         error: "",
         info: "",
-        show: true ,
+        show: true,
         selectedFile: null
     }
 
     constructor(props) {
         super(props);
+        var getUserId = localStorage.getItem('userPortalId');
+        if (getUserId > 0) {
+            axios.get(url + 'loginrecord/userid?userId=' + getUserId)
+                .then(response => {
+                    if (response.data && response.data.id > 0) {
+                        this.setState({ islogin: true });
+                    }
+                    else {
+                        localStorage.removeItem('userPortalId');
+                        localStorage.removeItem('localguid');
+                    }
+                })
+        }
     }
 
     handleClose = () => {
@@ -87,7 +100,7 @@ export default class App extends React.Component {
         })
     }
 
-   
+
 
     setWifiPassword = (pass) => this.setState({ password: pass });
     setWifiSSID = (id) => this.setState({ ssid: id });

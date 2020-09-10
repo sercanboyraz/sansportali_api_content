@@ -9,7 +9,7 @@ const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const publicIp = require('public-ip');
 
-// const url = "http://localhost:5000/";
+//const url = "http://localhost:5000/";
 const url = "https://api.boykaf.xyz/";
 
 const uniqid = require('uniqid');

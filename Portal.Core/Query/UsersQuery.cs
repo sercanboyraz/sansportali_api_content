@@ -37,6 +37,21 @@ namespace Portal.Core
             return result.Count > 0 ? result[0] : null;
         }
 
+        public async Task<Users> FindOneUserIdAsync(int userId)
+        {
+            var cmd = Db.Connection.CreateCommand();
+            cmd.CommandText = @"SELECT `Id`, `Name`, `Surname`,`Username`, `PhoneNumber`, `LicenseCount` FROM `users` WHERE `Id` = @userId";
+            cmd.Parameters.Add(new MySqlParameter
+            {
+                ParameterName = "@userId",
+                DbType = DbType.String,
+                Value = userId,
+            });
+            var execute = cmd.ExecuteReaderAsync();
+            var result = ReadAllAsync(await execute).Result;
+            return result.Count > 0 ? result[0] : null;
+        }
+
         private async Task<List<Users>> ReadAllAsync(System.Data.Common.DbDataReader reader)
         {
             var posts = new List<Users>();
