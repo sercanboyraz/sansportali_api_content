@@ -100,7 +100,7 @@ export default class Content extends React.Component {
             let windowHeight = document.documentElement.clientHeight;
             let controlsHeight = this.getControlsHeight();
             let webviewHeight = windowHeight - controlsHeight;
-            webview.style.width = (windowWidth - 1) + 'px';
+            //webview.style.width = (windowWidth - 1) + 'px';
             webview.style.height = webviewHeight + 'px';
         });
     }

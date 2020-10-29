@@ -124,7 +124,7 @@
         .main-head {
             position: fixed;
             bottom: 0;
-            width: 83px;
+            width: 5%;
             height: 100%;
             z-index: 1;
             background: slategray;
@@ -215,9 +215,9 @@
 </head>
 
 <body>
-    <div id="root"></div>
-    <div className="wrap-all-the-things">
-        <webview id="webview" src="./main.html" allowpopups partition='persist:webviewsession'></webview>
+    <div id="root" ></div>
+    <div className="wrap-all-the-things" style="margin-left: 5%;">
+        <webview id="webview" src="./main2.html" allowpopups partition='persist:webviewsession'  autosize="on" ></webview>
     </div>
 </body>
 
