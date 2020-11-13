@@ -59,7 +59,7 @@ namespace Portal.Core.Query
             cmd.Parameters.Add(new MySqlParameter
             {
                 ParameterName = "@Date",
-                DbType = DbType.DateTime2,
+                DbType = DbType.DateTime,
                 Value = getDate,
             });
             var ttt = await cmd.ExecuteNonQueryAsync();

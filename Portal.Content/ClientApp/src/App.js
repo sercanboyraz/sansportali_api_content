@@ -8,8 +8,8 @@ const electron = window.require('electron');
 const fs = electron.remote.require('fs');
 const ipcRenderer = electron.ipcRenderer;
 
-//const url = "http://localhost:5000/";
-const url = "https://api.boykaf.xyz/";
+const url = "http://localhost:5000/";
+//const url = "https://api.boykaf.xyz/";
 export default class App extends React.Component {
 
     state = {

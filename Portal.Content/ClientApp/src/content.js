@@ -2,8 +2,9 @@ import React from 'react'
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { TextField, FormControlLabel, Checkbox } from '@material-ui/core'
 import { ListGroup, InputGroup, Button, FormControl, Modal, OverlayTrigger, Tooltip, Tabs, Tab, Form, Image, Card, Row, Container, Col } from 'react-bootstrap'
-import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff,SettingsOutlined } from '@material-ui/icons';
+import { SaveOutlined, LoopOutlined, WifiOutlined, PowerSettingsNew, DoneAll, HighlightOff, SettingsOutlined } from '@material-ui/icons';
 import FileBase64 from 'react-file-base64';
+import moment from 'moment'
 const axios = require('axios');
 const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
@@ -13,6 +14,7 @@ const publicIp = require('public-ip');
 const url = "https://api.boykaf.xyz/";
 
 const uniqid = require('uniqid');
+
 
 export default class Content extends React.Component {
 
@@ -42,14 +44,21 @@ export default class Content extends React.Component {
     }
 
     ipv4 = async () => { return publicIp.v4() };
-    ipv6 = async () => { return publicIp.v6() };
+
     componentDidMount() {
         var getLocalStorageUserId = localStorage.getItem('userPortalId');
+        let date = moment().format("L");
+        var getlocalguiddate = localStorage.getItem('localguiddate');
+        var getlocalguid = localStorage.setItem('localguid');
+        if (getlocalguiddate !== date) {
+            var getlocalguiddate = localStorage.setItem('localguiddate',date);
+            localStorage.setItem('localguid', uniqid());
+        }
+        // localStorage.setItem('localguid', uniqid());
 
-        localStorage.setItem('localguid', uniqid());
         this.setState({ permissions: this.props.permission });
-        this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
 
+        this.setState({ wifiList: JSON.parse(localStorage.getItem("wifis")) });
         this.permissionset();
 
         axios.get(url + 'webcontent/allpermission?userid=' + getLocalStorageUserId)
@@ -60,22 +69,12 @@ export default class Content extends React.Component {
             })
 
         this.ipv4().then(result => {
-            axios.post(url + 'raspianip?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
+            axios.post(url + 'raspianip?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + getlocalguid)
                 .then(ip => {
                     if (ip.data) {
                         this.setState({ ipValue: result });
                         this.setState({ ipAddress: '' });
-                    }
-                })
-        });
-
-        this.ipv4().then(result => {
-            axios.post(url + 'raspianip?userId=' + getLocalStorageUserId + '&ipv4=' + result + '&ipv6=' + localStorage.getItem("localguid"))
-                .then(ip => {
-                    if (ip.data) {
-                        this.setState({ ipValue: result });
-                        this.setState({ ipAddress: '' });
-                    }
+                    } 
                 })
         });
 
@@ -85,14 +84,6 @@ export default class Content extends React.Component {
                     this.setState({ imageUrl: responsePermission.data.DataUrl });
                 }
             });
-
-        // var webview = document.getElementById('webview');
-        // webview.addEventListener('dom-ready', function () {
-        //     webview.insertCSS(".popupLoginMain,.footerContainer,.headerLogin,.modal-body.blockElement,.lgbtn,.relative,.grid_4,.footer-list,.footerText,.gradient-gold,.bottom-followus,.loggedOut,.admatic_interstitial_iframe_content_main,.page-homepage-index__container-widget,.page-homepage-index__container-widget--social-posts,.widget-footer,.widget-nesine-most-played-coupons,.widget-nesine-most-played-coupons--desktop,.logos,.widget,.footer-nav,.footer-links,[class^='Stage_Rectangle'],.widget-legacy-link-banner,.widget-social-post__follow-button,.adform-adbox,.admatic_interstitial_logo_area_span,iframe,.c,.b,.a,.medyanet-ad-models-pageskin,.mpu,.userbox,.lgnform { display: none !important}");
-        //     webview.insertCSS(".coupon__bottom-line  { display:block; } ");
-        //     webview.insertCSS(".coupon__select-input  { padding-left: 45px; text-align:right !important; }");
-        //     webview.insertCSS(".coupon__select-box  { width: 100%; } ");
-        // });
 
         window.addEventListener('load', (event) => {
             let webview = document.querySelector('webview');
@@ -150,7 +141,6 @@ export default class Content extends React.Component {
     handleCloseShutdown = () => {
         this.setState({ showShutdown: false });
     }
-
 
     handleCloseSetting = () => {
         this.setState({ showSetting: false });
@@ -427,7 +417,7 @@ export default class Content extends React.Component {
                                                 <Tab eventKey="main" title="Ana Sayfa Resimi" disabled>
                                                     <Form.Group controlId="formBasicEmail" aria-disabled>
                                                         <Form.File name="file" id="file" label="Giriş Resmi" onChange={this.onChangeHandler} accept=".jpg, .png, .jpeg" lang="tr" />
-                                                        <FileBase64 multiple={ false } onDone={ this.handleSaveSetting.bind(this) } label="Giriş Resmi" />
+                                                        <FileBase64 multiple={false} onDone={this.handleSaveSetting.bind(this)} label="Giriş Resmi" />
                                                         <Form.Text className="text-muted">
                                                             Resimler 1920*1080 çözünürlükte olmalıdır.
                                                         </Form.Text>
