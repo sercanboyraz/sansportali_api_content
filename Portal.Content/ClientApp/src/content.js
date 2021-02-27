@@ -10,8 +10,9 @@ const electron = window.require('electron');
 const ipcRenderer = electron.ipcRenderer;
 const publicIp = require('public-ip');
 
-//const url = "http://localhost:5000/";
-const url = "https://api.boykaf.xyz/";
+// const url = "http://localhost:5000/";
+//const url = "https://api.boykaf.xyz/";
+const url = "https://api.sansliplatform.com/"
 
 const uniqid = require('uniqid');
 
@@ -49,12 +50,12 @@ export default class Content extends React.Component {
         var getLocalStorageUserId = localStorage.getItem('userPortalId');
         let date = moment().format("L");
         var getlocalguiddate = localStorage.getItem('localguiddate');
-        var getlocalguid = localStorage.setItem('localguid');
         if (getlocalguiddate !== date) {
             var getlocalguiddate = localStorage.setItem('localguiddate',date);
             localStorage.setItem('localguid', uniqid());
         }
         // localStorage.setItem('localguid', uniqid());
+        var getlocalguid = localStorage.getItem('localguid');
 
         this.setState({ permissions: this.props.permission });
 
@@ -316,7 +317,7 @@ export default class Content extends React.Component {
 
                             </OverlayTrigger>
                             <OverlayTrigger
-                                key="top1"
+                                key="top2"
                                 placement="top"
                                 overlay={
                                     <Tooltip id={`tooltip-LoopOutlined`}><strong>Ayarlar</strong></Tooltip>
