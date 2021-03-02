@@ -284,7 +284,7 @@ export default class Content extends React.Component {
                             {
                                 permissions &&
                                 permissions.map((data) => (
-                                    <li key={data.id} onClick={() => this.navigateTo(data.webContent.webUrl)}>
+                                    <li key={uniqid()} onClick={() => this.navigateTo(data.webContent.webUrl)}>
                                         <img src={data.webContent.logoUrl} width="40" style={{ marginLeft: 20 }} />
                                         <span>{data.webContent.displayName}</span>
                                     </li>
