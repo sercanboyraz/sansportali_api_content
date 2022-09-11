@@ -8,7 +8,7 @@ const fetch = require('node-fetch');
 const shutdown = require('electron-shutdown-command');
 const isOnline = require('is-online');
 let devtools = null
-
+let domain = "http://localhost:3000/"
 function setMainMenu() {
   const template = [
     {
@@ -83,22 +83,22 @@ function createWindow() {
   isOnline().then(result => {
     if (!result) {
       mainWindow.maximize();
-      mainWindow.setFullScreen(false);
+      mainWindow.setFullScreen(true);
       setMainMenu();
     }
     else {
-      mainWindow.setFullScreen(true);
+      mainWindow.setFullScreen(false);
       Menu.setApplicationMenu(null);
     }
   })
- 
-  mainWindow.loadURL('https://boykaf.xyz/');
 
+  mainWindow.loadURL(domain);
   mainWindow.focus();
-  //mainWindow.loadURL('http://localhost/');
-  //mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
-  //mainWindow.webContents.openDevTools({ mode: 'detach' })
+  mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
+  mainWindow.webContents.openDevTools({ mode: 'detach' })
 }
+
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=80');
 
 app.on('web-contents-created', (e, contents) => {
   e.preventDefault();
@@ -156,7 +156,7 @@ app.on('web-contents-created', (e, contents) => {
           });
 
 
-          fetch('https://boykaf.xyz/css.json')
+          fetch(domain + 'css.json')
             .then(res => res.text())
             .then(json => {
               if (child && child.webContents) {
@@ -197,7 +197,7 @@ app.on('activate', () => {
 })
 
 ipcMain.handle('main-url', async (event, someArgument) => {
-  mainWindow.loadURL('https://boykaf.xyz/');
+  mainWindow.loadURL(domain);
   mainWindow.reload();
   return "";
 })
@@ -228,7 +228,7 @@ ipcMain.handle('refresh-internet', async (event, someArgument) => {
     }
     else {
       console.log("1" + result);
-      mainWindow.setFullScreen(true);
+      !domain.includes("localhost:3000") && mainWindow.setFullScreen(true);
       Menu.setApplicationMenu(null);
     }
   });

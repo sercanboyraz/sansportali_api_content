@@ -12901,19 +12901,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\SercanBoyraz\\.nuget\\packages\\": {}
+    "C:\\Users\\sercan\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\SercanBoyraz\\Source\\Repos\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
+      "projectUniqueName": "C:\\Users\\sercan\\otherSource\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
       "projectName": "Portal.Core",
-      "projectPath": "C:\\Users\\SercanBoyraz\\Source\\Repos\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
-      "packagesPath": "C:\\Users\\SercanBoyraz\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\SercanBoyraz\\Source\\Repos\\sansportali_api_content\\Portal.Core\\obj\\",
+      "projectPath": "C:\\Users\\sercan\\otherSource\\sansportali_api_content\\Portal.Core\\Portal.Core.csproj",
+      "packagesPath": "C:\\Users\\sercan\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\sercan\\otherSource\\sansportali_api_content\\Portal.Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\SercanBoyraz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\sercan\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12971,7 +12971,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }
