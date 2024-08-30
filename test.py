@@ -17,7 +17,7 @@ class Pipeline:
         # The identifier must be unique across all pipelines.
         # The identifier must be an alphanumeric string that can include underscores or hyphens. It cannot contain spaces, special characters, slashes, or backslashes.
         # self.id = "ollama_pipeline"
-        self.name = "test Pipeline"
+        self.name = "test2 Pipeline"
         
 
     async def on_startup(self):
