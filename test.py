@@ -42,7 +42,7 @@ class Pipeline:
             warnings.warn("Langflow provides a function to help you upload files to the flow. Please install langflow to use it.")
             upload_file = None
 
-        BASE_API_URL = "http://localhost:7860"
+        BASE_API_URL = "http://host.docker.internal:7860"
         FLOW_ID = "11a3f653-814d-4614-8a28-d73a9857c2c5"
         ENDPOINT = "" # You can set a specific endpoint name in the flow settings
 
