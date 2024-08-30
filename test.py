@@ -17,7 +17,7 @@ class Pipeline:
         # The identifier must be unique across all pipelines.
         # The identifier must be an alphanumeric string that can include underscores or hyphens. It cannot contain spaces, special characters, slashes, or backslashes.
         # self.id = "ollama_pipeline"
-        self.name = "test2 Pipeline"
+        self.name = "test3 Pipeline"
         
 
     async def on_startup(self):
@@ -31,7 +31,7 @@ class Pipeline:
         pass
 
     def pipe(
-        self
+        self,body: dict
     ) -> Union[str, Generator, Iterator]:
         # This is where you can add your custom pipelines like RAG.
         print(f"pipe:{__name__}")
@@ -146,7 +146,23 @@ class Pipeline:
                 api_key=args.api_key
             )
 
-            return json.dumps(response, indent=2)
+            # return json.dumps(response, indent=2)
+        
+            try:
+                r = requests.post(
+                    url=f"http://host.docker.internal:11434/v1/chat/completions",
+                    json={**body, "model": "gemma:2b"},
+                    stream=True,
+                )
+
+                r.raise_for_status()
+
+                if body["stream"]:
+                    return r.iter_lines()
+                else:
+                    return r.json()
+            except Exception as e:
+                return f"Error: {e}"
         main()
         # if __name__ == "__main__":
             # main()
@@ -157,19 +173,3 @@ class Pipeline:
         #     print(f'# User: {body["user"]["name"]} ({body["user"]["id"]})')
         #     print(f"# Message: {user_message}")
         #     print("######################################")
-
-        # try:
-        #     r = requests.post(
-        #         url=f"{OLLAMA_BASE_URL}/v1/chat/completions",
-        #         json={**body, "model": MODEL},
-        #         stream=True,
-        #     )
-
-        #     r.raise_for_status()
-
-        #     if body["stream"]:
-        #         return r.iter_lines()
-        #     else:
-        #         return r.json()
-        # except Exception as e:
-        #     return f"Error: {e}"
