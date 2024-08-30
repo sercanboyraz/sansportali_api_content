@@ -1,4 +1,5 @@
 from typing import List, Union, Generator, Iterator
+from pydantic import BaseModel
 import requests
 import argparse
 import json
@@ -8,6 +9,8 @@ from typing import Optional
 import warnings
 
 class Pipeline:
+    class Valves(BaseModel):
+        pass
     def __init__(self):
         # Optionally, you can set the id and name of the pipeline.
         # Best practice is to not specify the id so that it can be automatically inferred from the filename, so that users can install multiple versions of the same pipeline.
@@ -15,7 +18,7 @@ class Pipeline:
         # The identifier must be an alphanumeric string that can include underscores or hyphens. It cannot contain spaces, special characters, slashes, or backslashes.
         # self.id = "ollama_pipeline"
         self.name = "test Pipeline"
-        pass
+        
 
     async def on_startup(self):
         # This function is called when the server is started.
